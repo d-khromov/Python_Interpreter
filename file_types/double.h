@@ -1,4 +1,5 @@
 #include "pyobject.h"
+#include <utility>
 
 #ifndef FLOAT_H
 #define FLOAT_H
@@ -15,8 +16,8 @@ public:
 	Double(const Double& other);
 	Double& operator=(const Double& other);
 
-	Double(Double&& other) = delete;
-	Double& operator=(Double&& other) = delete;
+	Double(Double&& other);
+	Double& operator=(Double&& other);
 	
 	Double(double val);
 

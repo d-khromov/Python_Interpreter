@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <utility>
 #include "pyobject.h"
 
 #ifndef INT_H
@@ -16,10 +17,10 @@ public:
 	Int(const Int& other);
 	Int& operator=(const Int& other);
 
-	Int(Int&& other) = delete;
-	Int& operator=(Int&& other) = delete;
+	Int(Int&& other);
+	Int& operator=(Int&& other);
 	
-	Int(int val);
+	Int(uint64_t val);
 
 	~Int() = default;
 

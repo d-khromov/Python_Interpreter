@@ -19,10 +19,10 @@ public:
 
 	String(const std::string&);
 
-	const char& operator[](size_t i) const;
-	char& operator[](size_t i);
+	const char& operator[](const Int& i) const;
+	char& operator[](const Int& i);
 	
-	const size_t size() const;
+	const Int size() const;
 	String lower() const;
 	String upper() const;
 	String title() const;

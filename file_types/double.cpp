@@ -1,13 +1,25 @@
 #include "double.h"
 
-Double::Double(const Double& other): value(other.value){};
+Double::Double(const Double& other): PyObject(), value(other.value){};
 
 Double& Double::operator=(const Double& other){
 	value = other.value;
 	return *this;
 }
 
-Double::Double(double val): value(val){};
+Double::Double(double val): PyObject(), value(val){};
+
+Double::Double(Double&& o): PyObject(), value(0.){
+    std::swap(value, o.value);
+}
+
+Double &Double::operator=(Double &&other) {
+    if(this == &other){return *this;};
+    Double tmp(std::move(other));
+    std::swap(value, tmp.value);
+    return *this;
+}
+
 
 // Arithmetics
 Double Double::operator+(const Double& other) const {

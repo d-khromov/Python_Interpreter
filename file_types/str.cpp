@@ -1,4 +1,4 @@
-#include "string.h"
+#include "str.h"
 
 String::String(const String& o): value(o.value){};
 String& String::operator=(const String& o){
@@ -19,19 +19,19 @@ String::String(const std::string& val){
 	value = val;	
 }
 
-const char& String::operator[](size_t i) const {
-	return value[i];
+const char& String::operator[](const Int& i) const {
+	return value[i.value];
 }
-char& String::operator[](size_t i){
-	return value[i];
+char& String::operator[](const Int& i){
+	return value[i.value];
 }
 
-const size_t String::size() const{
-	return value.size();
+const Int String::size() const{
+	return Int(value.size());
 }
 String String::lower() const {
 	std::string tmp;
-	for(size_t i = 0; i < size(); i++){
+	for(size_t i = 0; i < value.size(); i++){
 		tmp.push_back(std::tolower(value[i]));
 	}
 	return String(tmp);
