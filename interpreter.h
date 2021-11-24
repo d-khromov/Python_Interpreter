@@ -95,9 +95,25 @@ void Interpreter::RunFrame(Frame *f) {
                 frame->locals[name] = v;
                 break;
             }
+            case DELETE_NAME:{
+                const char* name = frame->code->names[arg];
+                frame->locals.erase(name);
+                break;
+            }
             case LOAD_CONST:{
                 PyObject* v = frame->code->consts[arg];
                 frame->Push(v);
+                break;
+            }
+            case STORE_GLOBAL:{
+                PyObject* v = frame->Pop();
+                const char* name = frame->code->names[arg];
+                frame->globals[name] = v;
+                break;
+            }
+            case DELETE_GLOBAL:{
+                const char* name = frame->code->names[arg];
+                frame->globals.erase(name);
                 break;
             }
             case LOAD_NAME:{
@@ -105,6 +121,15 @@ void Interpreter::RunFrame(Frame *f) {
                 if(frame->locals.count(name)==1){
                     frame->Push(frame->locals[name]);
                 }else if(frame->globals.count(name)==1){
+                    frame->Push(frame->globals[name]);
+                }else if(frame->builtins.count(name)==1){
+                    frame->Push(frame->builtins[name]);
+                }
+                break;
+            }
+            case LOAD_GLOBAL:{
+                const char* name = frame->code->names[arg];
+                if(frame->globals.count(name)==1){
                     frame->Push(frame->globals[name]);
                 }else if(frame->builtins.count(name)==1){
                     frame->Push(frame->builtins[name]);
