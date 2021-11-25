@@ -3,7 +3,8 @@
 
 #include <vector>
 #include <unordered_map>
-#include "file_types/pyobject.h"
+#include "file_types/file_types.h"
+#include "pycodeobject.h"
 #include "frame.h"
 #include "opcode.h"
 
@@ -13,11 +14,11 @@ private:
     Frame* frame;
 public:
     Interpreter():frame(nullptr){};
-    void RunCode(PyCodeObject* code, const std::unordered_map<const char*, PyObject*>& globals={});
+    void RunCode(PyCodeObject* code, const std::unordered_map<const char*, ptr>& globals={});
     void RunFrame(Frame* frame);
 };
 
-void Interpreter::RunCode(PyCodeObject* code, const std::unordered_map<const char*, PyObject*>& globals) {
+void Interpreter::RunCode(PyCodeObject* code, const std::unordered_map<const char*, ptr>& globals) {
     frame = new Frame(code, globals, frame);
     RunFrame(frame);
 }
@@ -37,38 +38,38 @@ void Interpreter::RunFrame(Frame *f) {
                 break;
             }
             case ROT_TWO:{
-                PyObject* top = frame->Top();
-                PyObject* second = frame->Peek(1);
+                ptr top = frame->Top();
+                ptr second = frame->Peek(1);
                 frame->Set(top, 1);
                 frame->SetTop(second);
                 break;
             }
             case ROT_THREE:{
-                PyObject* top = frame->Top();
-                PyObject* second = frame->Peek(1);
-                PyObject* third = frame->Peek(2);
+                ptr top = frame->Top();
+                ptr second = frame->Peek(1);
+                ptr third = frame->Peek(2);
                 frame->Set(top, 2);
                 frame->Set(third, 1);
                 frame->SetTop(second);
                 break;
             }
             case DUP_TOP:{
-                PyObject* top = frame->Top();
+                ptr top = frame->Top();
                 frame->Push(top);
                 break;
             }
             case DUP_TOP_TWO:{
-                PyObject* top = frame->Top();
-                PyObject* second = frame->Peek(1);
+                ptr top = frame->Top();
+                ptr second = frame->Peek(1);
                 frame->Push(second);
                 frame->Push(top);
                 break;
             }
             case ROT_FOUR:{
-                PyObject* top = frame->Top();
-                PyObject* second = frame->Peek(1);
-                PyObject* third = frame->Peek(2);
-                PyObject* fourth = frame->Peek(3);
+                ptr top = frame->Top();
+                ptr second = frame->Peek(1);
+                ptr third = frame->Peek(2);
+                ptr fourth = frame->Peek(3);
                 frame->Set(top, 3);
                 frame->Set(third, 2);
                 frame->Set(fourth,1);
@@ -79,9 +80,9 @@ void Interpreter::RunFrame(Frame *f) {
                 break;
             }
             case 64:{// BINARY_ADD
-                PyObject* t1 = frame->Pop();
-                PyObject* t2 = frame->Top();
-                frame->SetTop(*t1 + *t2);
+                ptr t1 = frame->Pop();
+                ptr t2 = frame->Top();
+                frame->SetTop(TryAdd<Int, Int>(t1, t2));
                 break;
             }
             case RETURN_VALUE:{
@@ -90,13 +91,13 @@ void Interpreter::RunFrame(Frame *f) {
                 break;
             }
             case STORE_NAME:{
-                PyObject* v = frame->Pop();
+                ptr v = frame->Pop();
                 const char* name = frame->code->names[arg];
                 frame->locals[name] = v;
                 break;
             }
             case LOAD_CONST:{
-                PyObject* v = frame->code->consts[arg];
+                ptr v = frame->code->consts[arg];
                 frame->Push(v);
                 break;
             }
