@@ -123,6 +123,93 @@ ptr TryTitle(const ptr& lhs){
     }
 };
 
+template<class Type, class ...oTypes>
+ptr TryIsEqual(const ptr& lhs, const ptr& rhs){
+    Type * pl = dynamic_cast<Type*>(lhs.get());
+    Type * pr = dynamic_cast<Type*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        return std::shared_ptr<PyObject>(*pl == *pr);
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return {nullptr};
+    }else{
+        return TryIsEqual<oTypes...>(lhs, rhs);
+    }
+}
+
+template<class Type, class ...oTypes>
+ptr TryNotEqual(const ptr& lhs, const ptr& rhs){
+    Type * pl = dynamic_cast<Type*>(lhs.get());
+    Type * pr = dynamic_cast<Type*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        return std::shared_ptr<PyObject>(*pl != *pr);
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return {nullptr};
+    }else{
+        return TryNotEqual<oTypes...>(lhs, rhs);
+    }
+}
+
+template<class Type, class ...oTypes>
+ptr TryIsGreater(const ptr& lhs, const ptr& rhs){
+    Type * pl = dynamic_cast<Type*>(lhs.get());
+    Type * pr = dynamic_cast<Type*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        return std::shared_ptr<PyObject>(*pl > *pr);
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return {nullptr};
+    }else{
+        return TryIsGreater<oTypes...>(lhs, rhs);
+    }
+}
+
+template<class Type, class ...oTypes>
+ptr TryIsLess(const ptr& lhs, const ptr& rhs){
+    Type * pl = dynamic_cast<Type*>(lhs.get());
+    Type * pr = dynamic_cast<Type*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        return std::shared_ptr<PyObject>(*pl < *pr);
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return {nullptr};
+    }else{
+        return TryIsLess<oTypes...>(lhs, rhs);
+    }
+}
+
+template<class Type, class ...oTypes>
+ptr TryIsGreaterOrEqual(const ptr& lhs, const ptr& rhs){
+    Type * pl = dynamic_cast<Type*>(lhs.get());
+    Type * pr = dynamic_cast<Type*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        return std::shared_ptr<PyObject>(*pl >= *pr);
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return {nullptr};
+    }else{
+        return TryIsGreaterOrEqual<oTypes...>(lhs, rhs);
+    }
+}
+
+template<class Type, class ...oTypes>
+ptr TryIsLessOrEqual(const ptr& lhs, const ptr& rhs){
+    Type * pl = dynamic_cast<Type*>(lhs.get());
+    Type * pr = dynamic_cast<Type*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        return std::shared_ptr<PyObject>(*pl <= *pr);
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return {nullptr};
+    }else{
+        return TryIsLessOrEqual<oTypes...>(lhs, rhs);
+    }
+}
+
+ptr TryNot(const ptr& lhs){
+    Bool * pl = dynamic_cast<Bool*>(lhs.get());
+    if(pl != nullptr){
+        return std::shared_ptr<PyObject>(!(*pl));
+    }else{
+        return std::shared_ptr<Bool>(nullptr);
+    }
+}
+
 ptr TryAnd(const ptr& lhs, const ptr& rhs){
     Bool * pl = dynamic_cast<Bool*>(lhs.get());
     Bool * pr = dynamic_cast<Bool*>(rhs.get());

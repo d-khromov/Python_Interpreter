@@ -51,3 +51,27 @@ PyObject *PyObject::operator&&(PyObject *) const {
 PyObject *PyObject::operator||(PyObject *) const {
     return nullptr;
 }
+
+PyObject* PyObject::operator==(PyObject*) const{
+    return nullptr;
+};
+
+PyObject* PyObject::operator!=(PyObject*) const{
+    return nullptr;
+};
+
+PyObject* PyObject::operator<=(PyObject*) const{
+    return nullptr;
+};
+
+PyObject* PyObject::operator<(PyObject*) const{
+    return nullptr;
+};
+
+PyObject* PyObject::operator>=(PyObject*) const{
+    return nullptr;
+};
+
+PyObject* PyObject::operator>(PyObject*) const{
+    return nullptr;
+};
