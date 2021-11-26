@@ -26,22 +26,25 @@ char& String::operator[](const Int& i){
 	return value[i.value];
 }
 
-const Int String::size() const{
-	return Int(value.size());
+const PyObject* String::size() const{
+    auto * p = new Int(value.size())
+    return p;
 }
-String String::lower() const {
-	std::string tmp;
+PyObject* String::lower() const {
+    std::string tmp;
 	for(size_t i = 0; i < value.size(); i++){
 		tmp.push_back(std::tolower(value[i]));
 	}
-	return String(tmp);
+    auto * p = new String(tmp);
+	return p;
 }
 String String::upper() const {
 	std::string tmp;
 	for(size_t i = 0; i < size(); i++){
 		tmp.push_back(std::toupper(value[i]));
 	}
-	return String(tmp);
+    auto * p = new String(tmp);
+	return p;
 }
 String String::title() const{
 	std::string tmp;
@@ -53,11 +56,13 @@ String String::title() const{
 			tmp.push_back(value[i]);
 		}
 	}
-	return String(tmp);
+    auto * p = new String(tmp);
+	return p;
 }
 
-String String::operator+(const String& o) const{
-	return String(value + o.value);
+PyObject* String::operator+(const String& o) const{
+	auto * p = String(value + o.value);
+    return p;
 }
 
 String& String::operator+=(const String& o){

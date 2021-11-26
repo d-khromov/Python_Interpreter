@@ -32,7 +32,7 @@ ptr TrySubtract(const ptr& lhs, const ptr& rhs){
     }else if constexpr (sizeof...(oTypes) == 0) {
         return std::shared_ptr<Type>(nullptr);
     }else{
-        return TryAdd<oTypes...>(lhs, rhs);
+        return TrySubtract<oTypes...>(lhs, rhs);
     }
 };
 
@@ -45,7 +45,7 @@ ptr TryMultiply(const ptr& lhs, const ptr& rhs){
     }else if constexpr (sizeof...(oTypes) == 0) {
         return std::shared_ptr<Type>(nullptr);
     }else{
-        return TryAdd<oTypes...>(lhs, rhs);
+        return TryMultiply<oTypes...>(lhs, rhs);
     }
 };
 
@@ -58,7 +58,7 @@ ptr TryDivide(const ptr& lhs, const ptr& rhs){
     }else if constexpr (sizeof...(oTypes) == 0) {
         return std::shared_ptr<Type>(nullptr);
     }else{
-        return TryAdd<oTypes...>(lhs, rhs);
+        return TryDivide<oTypes...>(lhs, rhs);
     }
 };
 
@@ -70,7 +70,55 @@ ptr TryMinus(const ptr& lhs){
     }else if constexpr (sizeof...(oTypes) == 0) {
         return std::shared_ptr<Type>(nullptr);
     }else{
-        return TryAdd<oTypes...>(lhs);
+        return TryMinus<oTypes...>(lhs);
+    }
+};
+
+template<class Type, class ...oTypes>
+ptr TrySize(const ptr& lhs){
+    Type * pl = dynamic_cast<Type*>(lhs.get());
+    if(pl != nullptr){
+        return std::shared_ptr<PyObject>(pl->size());
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return std::shared_ptr<Type>(nullptr);
+    }else{
+        return TrySize<oTypes...>(lhs);
+    }
+};
+
+template<class Type, class ...oTypes>
+ptr TryLower(const ptr& lhs){
+    Type * pl = dynamic_cast<Type*>(lhs.get());
+    if(pl != nullptr){
+        return std::shared_ptr<PyObject>(pl->lower());
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return std::shared_ptr<Type>(nullptr);
+    }else{
+        return TryLower<oTypes...>(lhs);
+    }
+};
+
+template<class Type, class ...oTypes>
+ptr TryUpper(const ptr& lhs){
+    Type * pl = dynamic_cast<Type*>(lhs.get());
+    if(pl != nullptr){
+        return std::shared_ptr<PyObject>(pl->upper());
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return std::shared_ptr<Type>(nullptr);
+    }else{
+        return TryUpper<oTypes...>(lhs);
+    }
+};
+
+template<class Type, class ...oTypes>
+ptr TryTitle(const ptr& lhs){
+    Type * pl = dynamic_cast<Type*>(lhs.get());
+    if(pl != nullptr){
+        return std::shared_ptr<PyObject>(pl->title());
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return std::shared_ptr<Type>(nullptr);
+    }else{
+        return TryTitle<oTypes...>(lhs);
     }
 };
 

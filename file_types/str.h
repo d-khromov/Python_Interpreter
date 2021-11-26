@@ -22,12 +22,12 @@ public:
 	const char& operator[](const Int& i) const;
 	char& operator[](const Int& i);
 	
-	const Int size() const;
-	String lower() const;
-	String upper() const;
-	String title() const;
+	const PyObject* size() const;
+	PyObject* lower() const;
+	PyObject* upper() const;
+	PyObject* title() const;
 
-	String operator+(const String& o) const;
+	PyObject* operator+(const String& o) const;
 	String& operator+=(const String& o);
 
 	bool operator==(const String& o) const;
