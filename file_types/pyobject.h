@@ -11,18 +11,23 @@ public:
 	PyObject(PyObject&&) = delete;
 
     // Int, Double
-    virtual PyObject* operator+(PyObject* o) const;
-    virtual PyObject* operator-(PyObject* o) const;
+    virtual PyObject* operator+(PyObject*) const;
+    virtual PyObject* operator-(PyObject*) const;
     virtual PyObject* operator-() const;
-    virtual PyObject* operator*(PyObject* o) const;
-    virtual PyObject* operator/(PyObject* o) const;
-    virtual PyObject* operator%(PyObject* o) const;
+    virtual PyObject* operator*(PyObject*) const;
+    virtual PyObject* operator/(PyObject*) const;
+    virtual PyObject* operator%(PyObject*) const;
+    virtual PyObject* operator!() const;
 
     // String
     virtual const PyObject* size() const;
     virtual PyObject* lower() const;
     virtual PyObject* upper() const;
     virtual PyObject* title() const;
+
+    // Bool
+    virtual PyObject* operator&&(PyObject*) const;
+    virtual PyObject* operator||(PyObject*) const;
 };
 
 #endif // PYOBJECT_H

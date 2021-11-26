@@ -1,6 +1,7 @@
 #include "pyobject.h"
 #include <string>
 #include <utility>
+#include "int.h"
 
 #ifndef STRING_H
 #define STRING_H
@@ -30,8 +31,8 @@ public:
 	PyObject* operator+(const String& o) const;
 	String& operator+=(const String& o);
 
-	bool operator==(const String& o) const;
-	bool operator!=(const String& o) const;
+	PyObject* operator==(const String& o) const;
+	PyObject* operator!=(const String& o) const;
 };
 
 #endif // STRING_H

@@ -27,8 +27,7 @@ char& String::operator[](const Int& i){
 }
 
 const PyObject* String::size() const{
-    auto * p = new Int(value.size())
-    return p;
+    return new Int(value.size());
 }
 PyObject* String::lower() const {
     std::string tmp;
@@ -38,18 +37,18 @@ PyObject* String::lower() const {
     auto * p = new String(tmp);
 	return p;
 }
-String String::upper() const {
+PyObject* String::upper() const {
 	std::string tmp;
-	for(size_t i = 0; i < size(); i++){
+	for(size_t i = 0; i < value.size(); i++){
 		tmp.push_back(std::toupper(value[i]));
 	}
     auto * p = new String(tmp);
 	return p;
 }
-String String::title() const{
+PyObject* String::title() const{
 	std::string tmp;
-	for(size_t i = 0; i < size(); i++){
-		bool make_upper = (i==0 || i == size() - 1 || (value[i-1] == ' '));
+	for(size_t i = 0; i < value.size(); i++){
+		bool make_upper = (i==0 || i == value.size() - 1 || (value[i-1] == ' '));
 		if(make_upper){
 			tmp.push_back(std::toupper(value[i]));
 		}else{
@@ -61,8 +60,7 @@ String String::title() const{
 }
 
 PyObject* String::operator+(const String& o) const{
-	auto * p = String(value + o.value);
-    return p;
+	return new String(value + o.value);
 }
 
 String& String::operator+=(const String& o){
@@ -70,10 +68,10 @@ String& String::operator+=(const String& o){
 	return *this;
 }
 
-bool String::operator==(const String& o) const{
-	return o.value == value;
+PyObject* String::operator==(const String& o) const{
+	return new Bool(o.value == value);
 }
 
-bool String::operator!=(const String& o) const{
-	return o.value != value;
+PyObject* String::operator!=(const String& o) const{
+	return new Bool(o.value != value);
 }

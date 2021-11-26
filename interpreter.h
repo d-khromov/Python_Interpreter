@@ -4,7 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include "file_types/file_types.h"
-#include "pycodeobject.h"
+#include "file_types/pycodeobject.h"
 #include "frame.h"
 #include "opcode.h"
 
@@ -107,7 +107,7 @@ void Interpreter::RunFrame(Frame *f) {
                 break;
             }
             case STORE_GLOBAL:{
-                PyObject* v = frame->Pop();
+                ptr v = frame->Pop();
                 const char* name = frame->code->names[arg];
                 frame->globals[name] = v;
                 break;

@@ -4,6 +4,7 @@
 #include "double.h"
 #include "str.h"
 #include "list.h"
+#include "bool.h"
 
 #ifndef FILE_TYPES_H
 #define FILE_TYPES_H
@@ -17,7 +18,7 @@ ptr TryAdd(const ptr& lhs, const ptr& rhs){
     if(pl != nullptr && pr != nullptr){
         return std::shared_ptr<PyObject>(*pl + *pr);
     }else if constexpr (sizeof...(oTypes) == 0) {
-        return std::shared_ptr<Type>(nullptr);
+        return {nullptr};
     }else{
             return TryAdd<oTypes...>(lhs, rhs);
     }
@@ -30,7 +31,7 @@ ptr TrySubtract(const ptr& lhs, const ptr& rhs){
     if(pl != nullptr && pr != nullptr){
         return std::shared_ptr<PyObject>(*pl - *pr);
     }else if constexpr (sizeof...(oTypes) == 0) {
-        return std::shared_ptr<Type>(nullptr);
+        return {nullptr};
     }else{
         return TrySubtract<oTypes...>(lhs, rhs);
     }
@@ -43,7 +44,7 @@ ptr TryMultiply(const ptr& lhs, const ptr& rhs){
     if(pl != nullptr && pr != nullptr){
         return std::shared_ptr<PyObject>(*pl * *pr);
     }else if constexpr (sizeof...(oTypes) == 0) {
-        return std::shared_ptr<Type>(nullptr);
+        return {nullptr};
     }else{
         return TryMultiply<oTypes...>(lhs, rhs);
     }
@@ -56,7 +57,7 @@ ptr TryDivide(const ptr& lhs, const ptr& rhs){
     if(pl != nullptr && pr != nullptr){
         return std::shared_ptr<PyObject>(*pl / *pr);
     }else if constexpr (sizeof...(oTypes) == 0) {
-        return std::shared_ptr<Type>(nullptr);
+        return {nullptr};
     }else{
         return TryDivide<oTypes...>(lhs, rhs);
     }
@@ -68,7 +69,7 @@ ptr TryMinus(const ptr& lhs){
     if(pl != nullptr){
         return std::shared_ptr<PyObject>(-(*pl));
     }else if constexpr (sizeof...(oTypes) == 0) {
-        return std::shared_ptr<Type>(nullptr);
+        return {nullptr};
     }else{
         return TryMinus<oTypes...>(lhs);
     }
@@ -80,7 +81,7 @@ ptr TrySize(const ptr& lhs){
     if(pl != nullptr){
         return std::shared_ptr<PyObject>(pl->size());
     }else if constexpr (sizeof...(oTypes) == 0) {
-        return std::shared_ptr<Type>(nullptr);
+        return {nullptr};
     }else{
         return TrySize<oTypes...>(lhs);
     }
@@ -92,7 +93,7 @@ ptr TryLower(const ptr& lhs){
     if(pl != nullptr){
         return std::shared_ptr<PyObject>(pl->lower());
     }else if constexpr (sizeof...(oTypes) == 0) {
-        return std::shared_ptr<Type>(nullptr);
+        return {nullptr};
     }else{
         return TryLower<oTypes...>(lhs);
     }
@@ -104,7 +105,7 @@ ptr TryUpper(const ptr& lhs){
     if(pl != nullptr){
         return std::shared_ptr<PyObject>(pl->upper());
     }else if constexpr (sizeof...(oTypes) == 0) {
-        return std::shared_ptr<Type>(nullptr);
+        return {nullptr};
     }else{
         return TryUpper<oTypes...>(lhs);
     }
@@ -116,12 +117,30 @@ ptr TryTitle(const ptr& lhs){
     if(pl != nullptr){
         return std::shared_ptr<PyObject>(pl->title());
     }else if constexpr (sizeof...(oTypes) == 0) {
-        return std::shared_ptr<Type>(nullptr);
+        return std::shared_ptr<PyObject>(nullptr);
     }else{
         return TryTitle<oTypes...>(lhs);
     }
 };
 
+ptr TryAnd(const ptr& lhs, const ptr& rhs){
+    Bool * pl = dynamic_cast<Bool*>(lhs.get());
+    Bool * pr = dynamic_cast<Bool*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        return std::shared_ptr<PyObject>(*pl && *pr);
+    }else{
+        return std::shared_ptr<Bool>(nullptr);
+    }
+}
 
+ptr TryOr(const ptr& lhs, const ptr& rhs){
+    Bool * pl = dynamic_cast<Bool*>(lhs.get());
+    Bool * pr = dynamic_cast<Bool*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        return std::shared_ptr<PyObject>(*pl || *pr);
+    }else{
+        return std::shared_ptr<PyObject>(nullptr);
+    }
+}
 
 #endif // FILE_TYPES_H

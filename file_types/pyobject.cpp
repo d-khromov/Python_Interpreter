@@ -39,3 +39,15 @@ PyObject *PyObject::upper() const {
 PyObject *PyObject::title() const {
     return nullptr;
 }
+
+PyObject *PyObject::operator!() const {
+    return nullptr;
+}
+
+PyObject *PyObject::operator&&(PyObject *) const {
+    return nullptr;
+}
+
+PyObject *PyObject::operator||(PyObject *) const {
+    return nullptr;
+}

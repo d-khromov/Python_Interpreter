@@ -1,5 +1,5 @@
 #include <cstdint>
-#include "file_types/file_types.h"
+#include "file_types.h"
 
 #ifndef PYCODEOBJECT_H
 #define PYCODEOBJECT_H

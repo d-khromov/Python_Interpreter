@@ -44,26 +44,26 @@ PyObject* Int::operator%(const Int& other) const{
 }
 
 // Arithmetics with assignment
-//Int& Int::operator+=(const Int& other){
-//	value += other.value;
-//	return *this;
-//}
-//Int& Int::operator-=(const Int& other){
-//	value -= other.value;
-//	return *this;
-//}
-//Int& Int::operator*=(const Int& other){
-//	value *= other.value;
-//	return *this;
-//}
-//Int& Int::operator/=(const Int& other){
-//	value /= other.value;
-//	return *this;
-//}
-//Int& Int::operator%=(const Int& other){
-//	value %= other.value;
-//	return *this;
-//}
+Int& Int::operator+=(const Int& other){
+	value += other.value;
+	return *this;
+}
+Int& Int::operator-=(const Int& other){
+	value -= other.value;
+	return *this;
+}
+Int& Int::operator*=(const Int& other){
+	value *= other.value;
+	return *this;
+}
+Int& Int::operator/=(const Int& other){
+	value /= other.value;
+	return *this;
+}
+Int& Int::operator%=(const Int& other){
+	value %= other.value;
+	return *this;
+}
 
 PyObject* Int::operator+(const Double& other) const {
 	auto * p = new Double(other.value + value);
@@ -81,41 +81,41 @@ PyObject* Int::operator/(const Double& other) const{
 	auto * p = new Double(double(value) / other.value);
     return p;
 }
-//
-//bool Int::operator==(const Int& other) const{
-//	return value == other.value;
-//}
-//bool Int::operator<=(const Int& other) const{
-//	return value <= other.value;
-//}
-//bool Int::operator<(const Int& other) const{
-//	return value < other.value;
-//}
-//bool Int::operator>=(const Int& other) const{
-//	return value >= other.value;
-//}
-//bool Int::operator>(const Int& other) const{
-//	return value > other.value;
-//}
-//bool Int::operator!=(const Int& other) const{
-//	return value != other.value;
-//}
-//
-//bool Int::operator==(const Double& other) const{
-//	return value == other.value;
-//}
-//bool Int::operator<=(const Double& other) const{
-//	return value <= other.value;
-//}
-//bool Int::operator<(const Double& other) const{
-//	return value < other.value;
-//}
-//bool Int::operator>=(const Double& other) const{
-//	return value >= other.value;
-//}
-//bool Int::operator>(const Double& other) const{
-//	return value > other.value;
-//}
-//bool Int::operator!=(const Double& other) const{
-//	return value != other.value;
-//}
+
+PyObject* Int::operator==(const Int& other) const{
+	return new Bool(value == other.value);
+}
+PyObject* Int::operator<=(const Int& other) const{
+	return new Bool(value <= other.value);
+}
+PyObject* Int::operator<(const Int& other) const{
+	return new Bool(value < other.value);
+}
+PyObject* Int::operator>=(const Int& other) const{
+	return new Bool(value >= other.value);
+}
+PyObject* Int::operator>(const Int& other) const{
+	return new Bool(value > other.value);
+}
+PyObject* Int::operator!=(const Int& other) const{
+	return new Bool(value != other.value);
+}
+
+PyObject* Int::operator==(const Double& other) const{
+	return new Bool(value == other.value);
+}
+PyObject* Int::operator<=(const Double& other) const{
+	return new Bool(value <= other.value);
+}
+PyObject* Int::operator<(const Double& other) const{
+	return new Bool(value < other.value);
+}
+PyObject* Int::operator>=(const Double& other) const{
+	return new Bool(value >= other.value);
+}
+PyObject* Int::operator>(const Double& other) const{
+	return new Bool(value > other.value);
+}
+PyObject* Int::operator!=(const Double& other) const{
+	return new Bool(value != other.value);
+}

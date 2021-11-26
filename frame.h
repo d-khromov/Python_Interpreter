@@ -1,7 +1,7 @@
 #ifndef PYTHON_INTERPRETER_FRAME_H
 #define PYTHON_INTERPRETER_FRAME_H
 #include "file_types/file_types.h"
-#include "pycodeobject.h"
+#include "file_types/pycodeobject.h"
 
 class Frame{
 private:
