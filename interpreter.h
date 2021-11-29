@@ -79,14 +79,59 @@ void Interpreter::RunFrame(Frame *f) {
             case NOP:{
                 break;
             }
-            case 64:{// BINARY_ADD
+            case UNARY_NEGATIVE:{
+                frame->SetTop(TryMinus<PyObject>(frame->Top()));
+                break;
+            }
+            case UNARY_NOT:{
+                frame->SetTop(TryNot(frame->Top()));
+                break;
+            }
+            case BINARY_MULTIPLY:{
                 ptr t1 = frame->Pop();
                 ptr t2 = frame->Top();
-                frame->SetTop(TryAdd<Int, Int>(t1, t2));
+                frame->SetTop(TryMultiply<Int, Double>(t1, t2));
+                break;
+            }
+            case BINARY_ADD:{
+                ptr t1 = frame->Pop();
+                ptr t2 = frame->Top();
+                frame->SetTop(TryAdd<Int, Double, String, Bool>(t1, t2));
+                break;
+            }
+            case BINARY_SUBTRACT:{
+                ptr t1 = frame->Pop();
+                ptr t2 = frame->Top();
+                frame->SetTop(TrySubtract<Int, Double, Bool>(t2, t1));
+                break;
+            }
+            case BINARY_TRUE_DIVIDE:{
+                ptr t1 = frame->Pop();
+                ptr t2 = frame->Top();
+                frame->SetTop(TryDivide<Int, Double>(t2, t1));
+                break;
+            }
+            case GET_LEN:{
+                frame->Push(TrySize<String>(frame->Top()));
+                break;
+            }
+            case BINARY_AND:{
+                ptr t1 = frame->Pop();
+                ptr t2 = frame->Top();
+                frame->SetTop(TryAnd(t2, t1));
+                break;
+            }
+            case BINARY_OR:{
+                ptr t1 = frame->Pop();
+                ptr t2 = frame->Top();
+                frame->SetTop(TryOr(t2, t1));
                 break;
             }
             case RETURN_VALUE:{
                 frame->retval = frame->Pop();
+                if(frame->prev_frame != nullptr){
+                    frame->prev_frame->Push(frame->retval);
+                }
                 frame->running = false;
                 break;
             }
@@ -128,6 +173,39 @@ void Interpreter::RunFrame(Frame *f) {
                 }
                 break;
             }
+            case COMPARE_OP:{
+                ptr right = frame->Pop();
+                ptr left = frame->Top();
+                ptr ret=nullptr;
+                switch(arg){
+                    case 0:{
+                        ret= TryIsLess<Int, Double>(right, left);
+                        break;
+                    }
+                    case 1:{
+                        ret= TryIsLessOrEqual<Int, Double>(right, left);
+                        break;
+                    }
+                    case 2:{
+                        ret= TryIsEqual<Int, Double, String>(right, left);
+                        break;
+                    }
+                    case 3:{
+                        ret= TryNotEqual<Int, Double, String>(right, left);
+                        break;
+                    }
+                    case 4:{
+                        ret= TryIsGreater<Int, Double>(right, left);
+                        break;
+                    }
+                    case 5:{
+                        ret= TryIsGreaterOrEqual<Int, Double>(right, left);
+                        break;
+                    }
+                }
+                frame->Push(ret);
+                break;
+            }
             case LOAD_GLOBAL:{
                 const char* name = frame->code->names[arg];
                 if(frame->globals.count(name)==1){
@@ -135,6 +213,23 @@ void Interpreter::RunFrame(Frame *f) {
                 }else if(frame->builtins.count(name)==1){
                     frame->Push(frame->builtins[name]);
                 }
+                break;
+            }
+            case LOAD_FAST:{
+                const char* name = frame->code->var_names[arg];
+                ptr v = frame->locals[name];
+                frame->Push(v);
+                break;
+            }
+            case STORE_FAST:{
+                ptr v = frame->Pop();
+                const char* name = frame->code->var_names[arg];
+                frame->locals[name] = v;
+                break;
+            }
+            case DELETE_FAST:{
+                const char* name = frame->code->var_names[arg];
+                frame->locals.erase(name);
                 break;
             }
         }
