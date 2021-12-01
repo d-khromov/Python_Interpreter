@@ -37,4 +37,6 @@ public:
     virtual PyObject* title() const;
 };
 
+using ptr = typename std::shared_ptr<PyObject>;
+
 #endif // PYOBJECT_H
