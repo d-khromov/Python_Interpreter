@@ -124,7 +124,7 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                 break;
             }
             case GET_LEN:{
-                //frame->Push(TrySize<String>(frame->Top())); TODO: doesn't work
+                frame->Push(TrySize<String>(frame->Top()));
                 break;
             }
             case BINARY_AND:{
