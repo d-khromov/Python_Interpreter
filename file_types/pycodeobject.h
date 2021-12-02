@@ -1,7 +1,6 @@
 #include <cstdint>
 #include <vector>
 #include <string>
-#include "../parser/json/single_include/nlohmann/json.hpp"
 #include <fstream>
 
 #include "pyobject.h"
@@ -11,7 +10,6 @@
 #include "list.h"
 #include "bool.h"
 
-using json = nlohmann::json;
 
 
 #ifndef PYCODEOBJECT_H
