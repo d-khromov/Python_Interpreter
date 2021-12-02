@@ -1,6 +1,7 @@
 #include <memory>
 #include <variant>
 #include <vector>
+#include <string>
 
 #ifndef PYOBJECT_H
 #define PYOBJECT_H
