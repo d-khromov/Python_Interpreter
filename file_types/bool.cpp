@@ -1,6 +1,7 @@
 #include "bool.h"
 
-Bool::Bool(Bool && o) : value(false){
+Bool::Bool(Bool && o){
+    value = false;
     std::swap(value, o.value);
 }
 
@@ -10,7 +11,9 @@ Bool &Bool::operator=(Bool && o) {
     return *this;
 }
 
-Bool::Bool(const Bool & o) : value(o.value){};
+Bool::Bool(const Bool & o){
+    value = o.value;
+};
 
 Bool &Bool::operator=(const Bool & o) {
     value = o.value;
@@ -22,31 +25,31 @@ Bool::Bool(bool val) {
 }
 
 PyObject *Bool::operator!() const {
-    return new Bool(!value);
+    return new Bool(!std::get<bool>(value));
 }
 
 PyObject *Bool::operator+(const Bool &h) const {
-    return new Bool(value + h.value);
+    return new Bool(std::get<bool>(value) + std::get<bool>(h.value));
 }
 
 PyObject* Bool::operator-(const Bool& h) const{
-    return new Bool(value - h.value);
+    return new Bool(std::get<bool>(value) - std::get<bool>(h.value));
 }
 
 PyObject *Bool::operator&&(const Bool &h) const {
-    return new Bool(value && h.value);
+    return new Bool(std::get<bool>(value) && std::get<bool>(h.value));
 }
 
 PyObject *Bool::operator||(const Bool &h) const {
-    return new Bool(value || h.value);
+    return new Bool(std::get<bool>(value) || std::get<bool>(h.value));
 }
 
 Bool::Bool(const Int& o) {
-    value = bool(o.value);
+    value = bool(std::get<uint64_t>(o.value));
 }
 
 Bool::Bool(const Double &o) {
-    value = bool(o.value);
+    value = bool(std::get<double>(o.value));
 }
 
 

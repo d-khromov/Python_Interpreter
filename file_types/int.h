@@ -12,7 +12,7 @@ class Int: public PyObject {
 private:
 	friend class Double;
 public:
-    uint64_t value;
+    using PyObject::value;
     Int() = default;
 
 	Int(const Int& other);

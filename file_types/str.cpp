@@ -1,11 +1,14 @@
 #include "str.h"
 
-String::String(const String& o): value(o.value){};
+String::String(const String& o): PyObject(){
+    value = o.value;
+};
 String& String::operator=(const String& o){
 	value = o.value;
 	return *this;
 }
-String::String(String&& o): value(""){
+String::String(String&& o): PyObject(){
+    value = "";
 	std::swap(value, o.value);
 }
 String& String::operator=(String&& o){
@@ -20,39 +23,39 @@ String::String(const std::string& val){
 }
 
 const char& String::operator[](const Int& i) const {
-	return value[i.value];
+	return std::get<std::string>(value)[std::get<uint64_t>(i.value)];
 }
 char& String::operator[](const Int& i){
-	return value[i.value];
+    return std::get<std::string>(value)[std::get<uint64_t>(i.value)];
 }
 
 const PyObject* String::size() const{
-    return new Int(value.size());
+    return new Int(std::get<std::string>(value).size());
 }
 PyObject* String::lower() const {
-    std::string tmp;
-	for(size_t i = 0; i < value.size(); i++){
-		tmp.push_back(std::tolower(value[i]));
+    std::string tmp(std::get<std::string>(value));
+	for(size_t i = 0; i < tmp.size(); i++){
+		tmp[i] = std::tolower(tmp[i]);
 	}
     auto * p = new String(tmp);
 	return p;
 }
 PyObject* String::upper() const {
-	std::string tmp;
-	for(size_t i = 0; i < value.size(); i++){
-		tmp.push_back(std::toupper(value[i]));
-	}
+    std::string tmp(std::get<std::string>(value));
+    for(size_t i = 0; i < tmp.size(); i++){
+        tmp[i] = std::toupper(tmp[i]);
+    }
     auto * p = new String(tmp);
-	return p;
+    return p;
 }
 PyObject* String::title() const{
-	std::string tmp;
-	for(size_t i = 0; i < value.size(); i++){
-		bool make_upper = (i==0 || i == value.size() - 1 || (value[i-1] == ' '));
+    std::string tmp(std::get<std::string>(value));
+	for(size_t i = 0; i < tmp.size(); i++){
+		bool make_upper = (i==0 || i == tmp.size() - 1 || (tmp[i-1] == ' '));
 		if(make_upper){
-			tmp.push_back(std::toupper(value[i]));
+			tmp[i] = std::toupper(tmp[i]);
 		}else{
-			tmp.push_back(value[i]);
+            tmp[i] = std::toupper(tmp[i]);
 		}
 	}
     auto * p = new String(tmp);
@@ -60,18 +63,18 @@ PyObject* String::title() const{
 }
 
 PyObject* String::operator+(const String& o) const{
-	return new String(value + o.value);
+	return new String(std::get<std::string>(value) + std::get<std::string>(o.value));
 }
 
 String& String::operator+=(const String& o){
-	*this = std::move(String(value + o.value));
+	*this = std::move(String(std::get<std::string>(value) + std::get<std::string>(o.value)));
 	return *this;
 }
 
 PyObject* String::operator==(const String& o) const{
-	return new Bool(o.value == value);
+	return new Bool(std::get<std::string>(o.value) == std::get<std::string>(value));
 }
 
 PyObject* String::operator!=(const String& o) const{
-	return new Bool(o.value != value);
+	return new Bool(std::get<std::string>(o.value) != std::get<std::string>(value));
 }

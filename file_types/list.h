@@ -9,28 +9,29 @@
 
 class List: public PyObject{
 public:
-	std::vector<PyObject*> value;
+    using PyObject::value;
+    using var_type = typename std::vector<PyObject*>;
 	List() = default;
 	~List() = default;
 
 	List(List&& o);
-	List& operator=(List&& o);
+	List& operator=(List&&);
 	List(const List& o);
-	List& operator=(const List& o);
+	List& operator=(const List&);
 
-	void append(const PyObject&);
-	void insert(const size_t, const PyObject&);
-	void clear();
-	List copy() const;
+	void append(PyObject*);
+	void insert(const Int&, PyObject*);
+	void clear() override;
+	PyObject* copy() const override;
 	void extend(const List&);
-	size_t index(const PyObject* const) const;
-	PyObject* pop(size_t); // _ or * ???
-	void remove();
-	void reverse();
-	void sort();
+//	PyObject* index(const PyObject*) const;
+	PyObject* pop(const Int&);
+//	void remove(const PyObject& obj);
+	void reverse() override;
+//	void sort() override;
 
-	List operator+(const List&) const;
-	List operator*(const size_t) const;
+	PyObject* operator+(const List&) const;
+	PyObject* operator*(const Int&) const;
 };
 
 #endif // LIST_H

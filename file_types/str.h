@@ -8,7 +8,7 @@
 
 class String: public PyObject{
 public:
-	std::string value;
+    using PyObject::value;
 	String() = default;
 	~String() = default;
 	

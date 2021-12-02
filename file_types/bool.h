@@ -11,7 +11,7 @@ class Bool: public PyObject{
     friend class Int;
     friend class Double;
 public:
-    bool value;
+    using PyObject::value;
     Bool() = default;
     ~Bool() = default;
     Bool(Bool&&);

@@ -1,7 +1,13 @@
 #include <memory>
+#include <variant>
+#include <vector>
 
 #ifndef PYOBJECT_H
 #define PYOBJECT_H
+
+class PyObject;
+
+using Variable = typename std::variant<uint64_t, std::string, double, bool, std::vector<PyObject*>>;
 
 class PyObject{
 public:
@@ -9,6 +15,7 @@ public:
 	~PyObject() = default;
 	PyObject(const PyObject&) = delete;
 	PyObject(PyObject&&) = delete;
+    Variable value;
 
     // Int, Double, ...
     virtual PyObject* operator+(PyObject*) const;
@@ -35,6 +42,18 @@ public:
     virtual PyObject* lower() const;
     virtual PyObject* upper() const;
     virtual PyObject* title() const;
+
+    // List
+    virtual void append(PyObject*);
+    virtual void insert(PyObject*, PyObject*);
+    virtual void clear();
+    virtual PyObject* copy() const;
+    virtual void extend(PyObject*);
+    virtual PyObject* index(PyObject*) const;
+    virtual PyObject* pop(PyObject*);
+    virtual void remove(PyObject*);
+    virtual void reverse();
+    virtual void sort();
 };
 
 #endif // PYOBJECT_H

@@ -10,7 +10,7 @@ class Double: PyObject {
 private:
 	friend class Int;
 public:
-	double value;
+    using PyObject::value;
 	Double() = default;
 	
 	Double(const Double& other);
