@@ -50,5 +50,7 @@
 #define LOAD_FAST                       124
 #define STORE_FAST                      125
 #define DELETE_FAST                     126
+#define CALL_FUNCTION                   131
+#define MAKE_FUNCTION                   132
 
 #endif //PYTHON_INTERPRETER_OPCODE_H

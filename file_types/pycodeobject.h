@@ -1,5 +1,6 @@
 #include <cstdint>
 #include <vector>
+#include <string>
 #include "../parser/json/single_include/nlohmann/json.hpp"
 #include <fstream>
 
@@ -12,8 +13,6 @@
 
 using json = nlohmann::json;
 
-#include "pyobject.h"
-#include "int.h"
 
 #ifndef PYCODEOBJECT_H
 #define PYCODEOBJECT_H
@@ -33,9 +32,9 @@ public:
 //    Int posonlyargcount;
 //    Int stacksize;
     std::vector<uint8_t> code;
-    std::vector<std::shared_ptr<PyObject>> consts;
-    std::vector<const char*> names;
-    std::vector<const char*> var_names;
+    std::vector<ptr> consts;
+    std::vector<std::string> names;
+    std::vector<std::string> var_names;
     PyCodeObject() = default;
     PyCodeObject(const char* pathname);
 };

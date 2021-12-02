@@ -56,4 +56,6 @@ public:
     virtual void sort();
 };
 
+using ptr = typename std::shared_ptr<PyObject>;
+
 #endif // PYOBJECT_H

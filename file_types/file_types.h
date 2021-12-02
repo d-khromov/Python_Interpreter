@@ -5,6 +5,7 @@
 #include "str.h"
 #include "list.h"
 #include "bool.h"
+#include "pyfunction.h"
 
 #ifndef FILE_TYPES_H
 #define FILE_TYPES_H
@@ -272,6 +273,14 @@ ptr TryExtend(const ptr& lhs, const ptr& rhs){
         return lhs;
     }
     return {nullptr};
+}
+
+std::shared_ptr<PyFunction> make_function(const ptr& code, const ptr& name){
+
+    return std::make_shared<PyFunction>(
+            dynamic_cast<PyCodeObject*>(code.get()),
+            std::get<std::string>(dynamic_cast<String*>(name.get())->value)
+            );
 }
 
 #endif // FILE_TYPES_H

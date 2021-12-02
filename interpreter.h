@@ -3,34 +3,46 @@
 
 #include <vector>
 #include <unordered_map>
-#include "file_types/file_types.h"
-#include "file_types/pycodeobject.h"
 #include "frame.h"
 #include "opcode.h"
+#include "file_types/pyfunction.h"
+#include "file_types/builtins.h"
+#include "file_types/file_types.h"
+
+using frame_ptr = typename std::shared_ptr<Frame>;
 
 class Interpreter{
 private:
-    std::vector<Frame*> frame_stack;
-    Frame* frame;
+    std::vector<frame_ptr> frame_stack;
+    frame_ptr frame;
 public:
     Interpreter():frame(nullptr){};
-    void RunCode(PyCodeObject* code, const std::unordered_map<const char*, ptr>& globals={});
-    void RunFrame(Frame* frame);
+    void RunCode(PyCodeObject* code, const std::unordered_map<std::string, ptr>& globals={});
+    void RunFrame(const frame_ptr&);
+    void MakeBuiltins(const frame_ptr&);
+    void CallBuiltinFunction(const frame_ptr&, std::string, size_t, bool kwargs=false);
 };
 
-void Interpreter::RunCode(PyCodeObject* code, const std::unordered_map<const char*, ptr>& globals) {
-    frame = new Frame(code, globals, frame);
+void Interpreter::RunCode(PyCodeObject* code, const std::unordered_map<std::string, ptr>& globals) {
+    frame = std::make_shared<Frame>(code, globals);
+    MakeBuiltins(frame);
     RunFrame(frame);
 }
 
-void Interpreter::RunFrame(Frame *f) {
+void Interpreter::MakeBuiltins(const frame_ptr &frame) {
+    for(auto name:builtin_func_names){
+        frame->builtins[name.first] = std::make_shared<PyFunction>(nullptr, name.first);
+    }
+}
+
+void Interpreter::RunFrame(const frame_ptr& f) {
     frame_stack.push_back(f);
     frame = f;
     frame->running=true;
 
     while(frame->running){
         uint8_t instr = frame->code->code[frame->cur_instr]; //get instruction number
-        uint8_t arg = frame->code->code[++(frame->cur_instr)]; // get argument
+        size_t arg = frame->code->code[++(frame->cur_instr)]; // get argument
 
         switch(instr){
             case POP_TOP:{
@@ -112,7 +124,7 @@ void Interpreter::RunFrame(Frame *f) {
                 break;
             }
             case GET_LEN:{
-                frame->Push(TrySize<String>(frame->Top()));
+                //frame->Push(TrySize<String>(frame->Top())); TODO: doesn't work
                 break;
             }
             case BINARY_AND:{
@@ -133,16 +145,17 @@ void Interpreter::RunFrame(Frame *f) {
                     frame->prev_frame->Push(frame->retval);
                 }
                 frame->running = false;
+                frame_stack.pop_back();
                 break;
             }
             case STORE_NAME:{
                 ptr v = frame->Pop();
-                const char* name = frame->code->names[arg];
+                std::string name = frame->code->names[arg];
                 frame->locals[name] = v;
                 break;
             }
             case DELETE_NAME:{
-                const char* name = frame->code->names[arg];
+                std::string name = frame->code->names[arg];
                 frame->locals.erase(name);
                 break;
             }
@@ -153,17 +166,17 @@ void Interpreter::RunFrame(Frame *f) {
             }
             case STORE_GLOBAL:{
                 ptr v = frame->Pop();
-                const char* name = frame->code->names[arg];
+                std::string name = frame->code->names[arg];
                 frame->globals[name] = v;
                 break;
             }
             case DELETE_GLOBAL:{
-                const char* name = frame->code->names[arg];
+                std::string name = frame->code->names[arg];
                 frame->globals.erase(name);
                 break;
             }
             case LOAD_NAME:{
-                const char* name = frame->code->names[arg];
+                std::string name = frame->code->names[arg];
                 if(frame->locals.count(name)==1){
                     frame->Push(frame->locals[name]);
                 }else if(frame->globals.count(name)==1){
@@ -207,7 +220,7 @@ void Interpreter::RunFrame(Frame *f) {
                 break;
             }
             case LOAD_GLOBAL:{
-                const char* name = frame->code->names[arg];
+                std::string name = frame->code->names[arg];
                 if(frame->globals.count(name)==1){
                     frame->Push(frame->globals[name]);
                 }else if(frame->builtins.count(name)==1){
@@ -216,25 +229,76 @@ void Interpreter::RunFrame(Frame *f) {
                 break;
             }
             case LOAD_FAST:{
-                const char* name = frame->code->var_names[arg];
+                std::string name = frame->code->var_names[arg];
                 ptr v = frame->locals[name];
                 frame->Push(v);
                 break;
             }
             case STORE_FAST:{
                 ptr v = frame->Pop();
-                const char* name = frame->code->var_names[arg];
+                std::string name = frame->code->var_names[arg];
                 frame->locals[name] = v;
                 break;
             }
             case DELETE_FAST:{
-                const char* name = frame->code->var_names[arg];
+                std::string name = frame->code->var_names[arg];
                 frame->locals.erase(name);
+                break;
+            }
+            case MAKE_FUNCTION:{
+                ptr name = frame->Pop();
+                ptr code = frame->Pop();
+                std::shared_ptr<PyFunction> function = make_function(code, name);
+                frame->Push(function);
+                break;
+            }
+            case CALL_FUNCTION:{
+                auto function = std::make_shared<PyFunction>(*dynamic_cast<PyFunction*>(frame->Peek(arg).get()));
+
+                if(frame->builtins.count(function->name)==1){
+                    CallBuiltinFunction(frame, function->name, arg);
+                    break;
+                }
+
+                auto var_names = function->code->var_names;
+
+                std::unordered_map<std::string, ptr> locals;
+                for(size_t i=0; i<arg; ++i){
+                    if(i<function->code->var_names.size()){
+                        locals[var_names[arg-1-i]] = frame->Pop();
+                    }
+                }
+
+                frame_ptr new_frame = std::make_shared<Frame>(function->code, frame->globals, locals, frame.get());
+                RunFrame(new_frame);
+                if(!frame_stack.empty()){
+                    frame = frame_stack.back();
+                }else{
+                    frame= nullptr;
+                }
                 break;
             }
         }
         frame->cur_instr++;
     }
+}
+
+void Interpreter::CallBuiltinFunction(const frame_ptr &f, std::string name, size_t arg, bool kwargs) {
+    std::vector<ptr> args;
+    for(size_t i=0; i<arg; ++i){
+        args.push_back(f->Pop());
+    }
+    ptr retval = nullptr;
+
+    size_t f_code = builtin_func_names[name];
+    switch(f_code){
+        case 0:{
+            print(args);
+            break;
+        }
+    }
+
+    frame->Push(retval);
 }
 
 
