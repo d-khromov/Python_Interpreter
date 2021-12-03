@@ -6,11 +6,13 @@
 
 class Int;
 
-class Double: PyObject {
+class Double: public PyObject {
 private:
 	friend class Int;
 public:
     using PyObject::value;
+    BaseTypes type = DOUBLE;
+    typedef double val_type;
 	Double() = default;
 	
 	Double(const Double& other);

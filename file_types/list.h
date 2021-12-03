@@ -10,7 +10,8 @@
 class List: public PyObject{
 public:
     using PyObject::value;
-    using var_type = typename std::vector<PyObject*>;
+    BaseTypes type = LIST;
+    typedef  std::vector<PyObject*> val_type;
 	List() = default;
 	~List() = default;
 
@@ -24,11 +25,13 @@ public:
 	void clear() override;
 	PyObject* copy() const override;
 	void extend(const List&);
+    //TODO:
 //	PyObject* index(const PyObject*) const;
 	PyObject* pop(const Int&);
 //	void remove(const PyObject& obj);
 	void reverse() override;
 //	void sort() override;
+// TODO: operator[]
 
 	PyObject* operator+(const List&) const;
 	PyObject* operator*(const Int&) const;

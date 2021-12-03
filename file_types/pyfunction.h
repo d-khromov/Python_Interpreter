@@ -5,6 +5,7 @@
 
 class PyFunction:public PyObject{
 public:
+    BaseTypes type = FUNCTION;
     PyCodeObject* code;
     std::string name;
 

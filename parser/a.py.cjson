@@ -1,0 +1,105 @@
+{
+    "co_argcount": 0,
+    "co_cellvars": [],
+    "co_code": [
+        100,
+        0,
+        90,
+        0,
+        100,
+        1,
+        90,
+        1,
+        100,
+        2,
+        100,
+        3,
+        132,
+        0,
+        90,
+        2,
+        101,
+        3,
+        101,
+        2,
+        101,
+        0,
+        101,
+        1,
+        131,
+        2,
+        131,
+        1,
+        1,
+        0,
+        100,
+        4,
+        83,
+        0
+    ],
+    "co_consts": [
+        5,
+        4,
+        {
+            "co_argcount": 2,
+            "co_cellvars": [],
+            "co_code": [
+                124,
+                0,
+                124,
+                1,
+                23,
+                0,
+                83,
+                0
+            ],
+            "co_consts": [
+                null
+            ],
+            "co_filename": "../python/a.py",
+            "co_firstlineno": 5,
+            "co_flags": 67,
+            "co_freevars": [],
+            "co_kwonlyargcount": 0,
+            "co_lnotab": [
+                0,
+                1
+            ],
+            "co_name": "foo",
+            "co_names": [],
+            "co_nlocals": 2,
+            "co_posonlyargcount": 0,
+            "co_stacksize": 2,
+            "co_varnames": [
+                "a",
+                "b"
+            ]
+        },
+        "foo",
+        null
+    ],
+    "co_filename": "../python/a.py",
+    "co_firstlineno": 2,
+    "co_flags": 64,
+    "co_freevars": [],
+    "co_kwonlyargcount": 0,
+    "co_lnotab": [
+        4,
+        1,
+        4,
+        2,
+        8,
+        3
+    ],
+    "co_name": "<module>",
+    "co_names": [
+        "a",
+        "b",
+        "foo",
+        "print"
+    ],
+    "co_nlocals": 0,
+    "co_posonlyargcount": 0,
+    "co_stacksize": 4,
+    "co_varnames": []
+}

@@ -11,6 +11,8 @@ class Bool: public PyObject{
     friend class Int;
     friend class Double;
 public:
+    BaseTypes type = BOOL;
+    typedef bool val_type;
     using PyObject::value;
     Bool() = default;
     ~Bool() = default;

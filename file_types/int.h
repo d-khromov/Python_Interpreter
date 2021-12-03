@@ -13,6 +13,8 @@ private:
 	friend class Double;
 public:
     using PyObject::value;
+    BaseTypes type = INT;
+    typedef uint64_t val_type;
     Int() = default;
 
 	Int(const Int& other);

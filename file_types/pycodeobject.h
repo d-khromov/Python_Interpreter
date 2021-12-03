@@ -1,6 +1,7 @@
 #include <cstdint>
 #include <vector>
 #include <string>
+#include "../parser/json.hpp"
 #include <fstream>
 
 #include "pyobject.h"
@@ -10,6 +11,7 @@
 #include "list.h"
 #include "bool.h"
 
+using json = nlohmann::json;
 
 
 #ifndef PYCODEOBJECT_H
@@ -17,6 +19,7 @@
 
 class PyCodeObject : public PyObject{
 public:
+    BaseTypes type = CODEOBJECT;
 //    std::vector<std::shared_ptr<PyObject>> cellvars; // Strings
 //    std::vector co_lnotab;
 //    std::vector<std::shared_ptr<PyObject>> freevars; // Strings
@@ -35,5 +38,10 @@ public:
     std::vector<std::string> var_names;
     PyCodeObject() = default;
     PyCodeObject(const char* pathname);
+    PyCodeObject(const json&);
 };
+
+template<class IterType, class Type, class ...oTypes>
+ptr convert(IterType it);
+
 #endif //PYCODEOBJECT_H

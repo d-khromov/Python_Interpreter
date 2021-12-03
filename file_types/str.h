@@ -8,6 +8,8 @@
 
 class String: public PyObject{
 public:
+    BaseTypes type = STRING;
+    typedef std::string val_type;
     using PyObject::value;
 	String() = default;
 	~String() = default;

@@ -5,6 +5,15 @@
 
 #ifndef PYOBJECT_H
 #define PYOBJECT_H
+enum BaseTypes {
+    INT,
+    STRING,
+    LIST,
+    DOUBLE,
+    BOOL,
+    CODEOBJECT,
+    FUNCTION,
+};
 
 class PyObject;
 
@@ -12,6 +21,7 @@ using Variable = typename std::variant<uint64_t, std::string, double, bool, std:
 
 class PyObject{
 public:
+    BaseTypes type;
 	PyObject() = default;
 	~PyObject() = default;
 	PyObject(const PyObject&) = delete;
