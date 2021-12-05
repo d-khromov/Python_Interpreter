@@ -11,11 +11,11 @@
 #include "list.h"
 #include "bool.h"
 
-using json = nlohmann::json;
-
-
 #ifndef PYCODEOBJECT_H
 #define PYCODEOBJECT_H
+
+using json = nlohmann::json;
+
 
 class PyCodeObject : public PyObject{
 public:
@@ -44,4 +44,4 @@ public:
 template<class IterType, class Type, class ...oTypes>
 ptr convert(IterType it);
 
-#endif //PYCODEOBJECT_H
+#endif // PYCODEOBJECT_H

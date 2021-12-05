@@ -3,6 +3,7 @@
 
 #include "pyobject.h"
 #include "int.h"
+#include "type_funcs.h"
 
 #ifndef LIST_H
 #define LIST_H
@@ -25,8 +26,7 @@ public:
 	void clear() override;
 	PyObject* copy() const override;
 	void extend(const List&);
-    //TODO:
-//	PyObject* index(const PyObject*) const;
+	PyObject* index(PyObject*) const;
 	PyObject* pop(const Int&);
 //	void remove(const PyObject& obj);
 	void reverse() override;
@@ -35,6 +35,8 @@ public:
 
 	PyObject* operator+(const List&) const;
 	PyObject* operator*(const Int&) const;
+    PyObject* operator==(const List&) const;
+    PyObject* operator!=(const List&) const;
 };
 
 #endif // LIST_H

@@ -21,7 +21,7 @@ public:
 	Double(Double&& other);
 	Double& operator=(Double&& other);
 	
-	Double(double val);
+	Double(val_type);
 
 	~Double() = default;
 
@@ -64,6 +64,6 @@ public:
 	PyObject* operator!=(const Int& other) const;
 };
 
+#endif // FLOAT_H
 #include "int.h"
 #include "bool.h"
-#endif // FLOAT_H

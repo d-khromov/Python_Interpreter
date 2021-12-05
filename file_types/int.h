@@ -64,7 +64,7 @@ public:
 	PyObject* operator!=(const Double& other) const;
 };
 
-
-#endif // INT_H
 #include "double.h"
 #include "bool.h"
+
+#endif // INT_H

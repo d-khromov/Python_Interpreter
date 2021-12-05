@@ -37,15 +37,17 @@ void List::extend(const List& o){
         std::get<val_type>(value).push_back(std::get<val_type>(o.value)[i]);
 	}
 }
-/*PyObject* List::index(const PyObject* obj) const{
+PyObject* List::index(PyObject* obj) const{
 	size_t i = 0;
-	for(; i < value.size(); ++i){
-		if (value[i] == obj){
+    const auto&  b = std::get<val_type>(value);
+	for(; i < b.size(); ++i){
+        auto p =TryIsEqual<Int, Double, String, List, Bool>(ptr(obj), ptr(b[i]));
+		if (std::get<bool>(dynamic_cast<const Bool *>(p.get())->value)){
 			break;
 		}
 	}
 	return new Int(i);
-}*/
+}
 PyObject* List::pop(const Int& i){
 	auto tmp = std::get<val_type>(value)[std::get<uint64_t>(i.value)];
     std::get<val_type>(value).erase(std::get<val_type>(value).begin() + std::get<Int::val_type>(i.value));
@@ -71,4 +73,12 @@ PyObject* List::operator*(const Int& i) const{
 		tmp.extend(tmp);
 	}
 	return new List(std::move(tmp));
+}
+
+PyObject *List::operator==(const List& o) const {
+    return new Bool(o.value == value);
+}
+
+PyObject *List::operator!=(const List& o) const {
+    return new Bool(o.value != value);;
 }

@@ -52,4 +52,12 @@ Bool::Bool(const Double &o) {
     value = bool(std::get<double>(o.value));
 }
 
+PyObject *Bool::operator==(const Bool &h) const {
+    return new Bool(std::get<val_type>(value) == std::get<val_type>(h.value));
+}
+
+PyObject *Bool::operator!=(const Bool &h) const {
+    return new Bool(std::get<val_type>(value) != std::get<val_type>(h.value));
+}
+
 

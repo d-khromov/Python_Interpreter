@@ -1,7 +1,7 @@
+#include "pycodeobject.h"
+
 #ifndef PYFUNCTION_H
 #define PYFUNCTION_H
-
-#include "pycodeobject.h"
 
 class PyFunction:public PyObject{
 public:
@@ -18,4 +18,4 @@ public:
     ~PyFunction()=default;
 };
 
-#endif //PYFUNCTION_H
+#endif // PYFUNCTION_H

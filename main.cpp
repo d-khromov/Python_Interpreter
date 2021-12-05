@@ -1,4 +1,3 @@
-#include "file_types/file_types.h"
 #include "interpreter.h"
 #include "frame.h"
 #include "file_types/pycodeobject.h"

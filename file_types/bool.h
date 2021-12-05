@@ -1,8 +1,7 @@
 #include "pyobject.h"
 #include <utility>
 
-#ifndef BOOL_H
-#define BOOL_H
+#pragma once
 
 class Int;
 class Double;
@@ -20,13 +19,15 @@ public:
     Bool& operator=(Bool&&);
     Bool(const Bool&);
     Bool& operator=(const Bool&);
-    Bool(bool val);
+    Bool(bool);
     Bool(const Int&);
     Bool(const Double&);
 
     PyObject* operator!() const;
     PyObject* operator+(const Bool& h) const;
     PyObject* operator-(const Bool& h) const;
+    PyObject* operator==(const Bool& h) const;
+    PyObject* operator!=(const Bool& h) const;
 
     PyObject* operator&&(const Bool& h) const;
     PyObject* operator||(const Bool& h) const;
@@ -34,4 +35,3 @@ public:
 
 #include "int.h"
 #include "double.h"
-#endif //BOOL_H

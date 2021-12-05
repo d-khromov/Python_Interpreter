@@ -24,8 +24,8 @@ public:
     BaseTypes type;
 	PyObject() = default;
 	~PyObject() = default;
-	PyObject(const PyObject&) = delete;
-	PyObject(PyObject&&) = delete;
+	PyObject(const PyObject&) = default;
+	PyObject(PyObject&&) = default;
     Variable value;
 
     // Int, Double, ...
