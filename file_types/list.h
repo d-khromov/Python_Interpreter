@@ -26,15 +26,15 @@ public:
 	void clear() override;
 	PyObject* copy() const override;
 	void extend(const List&);
-	PyObject* index(PyObject*) const;
+	PyObject* index(const PyObject*) const;
 	PyObject* pop(const Int&);
-//	void remove(const PyObject& obj);
+	void remove(const PyObject& obj);
 	void reverse() override;
-//	void sort() override;
-// TODO: operator[]
+	void sort() override;
+    PyObject* operator[](const Int& i) const;
 
-	PyObject* operator+(const List&) const;
-	PyObject* operator*(const Int&) const;
+    PyObject* operator+(const List&) const;
+    PyObject* operator*(const Int&) const;
     PyObject* operator==(const List&) const;
     PyObject* operator!=(const List&) const;
 };

@@ -1,5 +1,12 @@
 #include "list.h"
 
+struct Cmp{
+    bool operator()(const PyObject* a, const PyObject* b){
+        auto p = TryIsLess<Int, Double>(cptr(a), cptr(b));
+        return std::get<Bool::val_type>(dynamic_cast<Bool*>(p.get())->value);
+    }
+};
+
 #include <algorithm>
 
 List::List(List&& o) : List(){
@@ -37,11 +44,11 @@ void List::extend(const List& o){
         std::get<val_type>(value).push_back(std::get<val_type>(o.value)[i]);
 	}
 }
-PyObject* List::index(PyObject* obj) const{
+PyObject* List::index(const PyObject* obj) const{
 	size_t i = 0;
     const auto&  b = std::get<val_type>(value);
 	for(; i < b.size(); ++i){
-        auto p =TryIsEqual<Int, Double, String, List, Bool>(ptr(obj), ptr(b[i]));
+        auto p =TryIsEqual<Int, Double, String, List, Bool>(cptr(obj), ptr(b[i]));
 		if (std::get<bool>(dynamic_cast<const Bool *>(p.get())->value)){
 			break;
 		}
@@ -53,15 +60,19 @@ PyObject* List::pop(const Int& i){
     std::get<val_type>(value).erase(std::get<val_type>(value).begin() + std::get<Int::val_type>(i.value));
 	return tmp;
 }
-/*void List::remove(const PyObject& obj){
-	value.erase(index(obj));
-}*/
+void List::remove(const PyObject& obj){
+	auto * pi = dynamic_cast<Int*>(index(&obj));
+    auto i = std::get<Int::val_type>(pi->value);
+    std::get<val_type>(value).erase(std::get<val_type>(value).begin() + i);
+    delete pi;
+}
 void List::reverse(){
 	std::reverse(std::get<val_type>(value).begin(), std::get<val_type>(value).end());
 }
-/*void List::sort(){
-	std::sort(std::get<val_type>(value).begin(), std::get<val_type>(value).end(), [](const PyObject* v){return v->value;});
-}*/
+void List::sort(){
+    auto * b = &std::get<val_type>(value);
+    std::sort<decltype(b->begin()), Cmp>(b->begin(), b->end(), Cmp());
+};
 PyObject* List::operator+(const List& o) const{
 	List tmp(*this);
 	tmp.extend(o);
@@ -81,4 +92,8 @@ PyObject *List::operator==(const List& o) const {
 
 PyObject *List::operator!=(const List& o) const {
     return new Bool(o.value != value);;
+}
+
+PyObject* List::operator[](const Int& i) const{
+    return std::get<val_type>(value)[std::get<Int::val_type>(i.value)];
 }
