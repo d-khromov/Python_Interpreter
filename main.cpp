@@ -3,7 +3,7 @@
 #include "file_types/pycodeobject.h"
 
 int main() {
-    PyCodeObject code("parser/a.py.cjson");
+    PyCodeObject code("parser/functions.py.cjson");
 
     Interpreter py;
     py.RunCode(&code);
