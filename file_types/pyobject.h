@@ -62,10 +62,10 @@ public:
 
     // List
     virtual void append(PyObject*);
-    virtual void insert(PyObject*, PyObject*);
+    virtual void insert(const PyObject*, PyObject*);
     virtual void clear();
     virtual PyObject* copy() const;
-    virtual void extend(PyObject*);
+    virtual void extend(const PyObject*);
     virtual PyObject* index(PyObject*) const;
     virtual PyObject* pop(PyObject*);
     virtual void remove(PyObject*);

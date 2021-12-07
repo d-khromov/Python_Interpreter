@@ -36,10 +36,10 @@ void List::append(PyObject* item){
     auto v = new PyObject(std::move(*item));
 	std::get<val_type>(value).push_back(std::shared_ptr<PyObject>(v));
 }
-void List::insert(const Int& i, PyObject* item){
+void List::insert(const PyObject* i, PyObject* item){
     auto v = new PyObject(std::move(*item));
 	std::get<val_type>(value).insert(
-            std::get<val_type>(value).begin() + std::get<Int::val_type>(i.value),
+            std::get<val_type>(value).begin() + std::get<Int::val_type>(i->value),
                         ptr(v)
                     );
 }
@@ -49,9 +49,9 @@ void List::clear(){
 PyObject* List::copy() const{
 	return new List(*this);
 }
-void List::extend(const List& o){
-	for(size_t i = 0; i < std::get<val_type>(o.value).size(); ++i){
-        auto v = new PyObject(std::move(*std::get<val_type>(o.value)[i]));
+void List::extend(const PyObject* o){
+	for(size_t i = 0; i < std::get<val_type>(o->value).size(); ++i){
+        auto v = new PyObject(std::move(*std::get<val_type>(o->value)[i]));
         std::get<val_type>(value).push_back(ptr(v));
 	}
 }
@@ -87,13 +87,13 @@ void List::sort(){
 };
 PyObject* List::operator+(const List& o) const{
 	List tmp(*this);
-	tmp.extend(o);
+	tmp.extend(&o);
 	return new List(std::move(tmp));
 }
 PyObject* List::operator*(const Int& i) const{
 	List tmp(*this);
 	for(size_t j = 0; j < std::get<Int::val_type>(i.value); ++j){
-		tmp.extend(tmp);
+		tmp.extend(&tmp);
 	}
 	return new List(std::move(tmp));
 }

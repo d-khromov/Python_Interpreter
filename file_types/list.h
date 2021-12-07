@@ -22,10 +22,10 @@ public:
 	List& operator=(const List&);
 
 	void append(PyObject*);
-	void insert(const Int&, PyObject*);
+	void insert(const PyObject*, PyObject*) override;
 	void clear() override;
 	PyObject* copy() const override;
-	void extend(const List&);
+	void extend(const PyObject*) override;
 	PyObject* index(const PyObject*) const;
 	PyObject* pop(const Int&);
 	void remove(const PyObject& obj);

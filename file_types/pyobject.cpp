@@ -70,12 +70,12 @@ PyObject* PyObject::operator>(PyObject*) const{
     return nullptr;
 };
 void PyObject::append(PyObject*){};
-void PyObject::insert(PyObject*, PyObject*){};
+void PyObject::insert(const PyObject *, PyObject*){};
 void PyObject::clear(){};
 PyObject* PyObject::copy() const{
     return nullptr;
 };
-void PyObject::extend(PyObject*){};
+void PyObject::extend(const PyObject*){};
 PyObject* PyObject::index(PyObject*) const{
     return nullptr;
 };
