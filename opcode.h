@@ -60,6 +60,8 @@
 #define CALL_FUNCTION                   131
 #define MAKE_FUNCTION                   132
 #define LIST_APPEND                     145
+#define LOAD_METHOD                     160
+#define CALL_METHOD                     161
 #define LIST_EXTEND                     162
 
 #endif //PYTHON_INTERPRETER_OPCODE_H

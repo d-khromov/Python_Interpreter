@@ -1,4 +1,5 @@
 #include "builtins.h"
+#include <iomanip>
 
 void print(const std::vector<ptr>& objects, std::string sep, std::string end){
     for(auto obj:objects) {
@@ -10,7 +11,7 @@ void print(const std::vector<ptr>& objects, std::string sep, std::string end){
                 std::cout << std::get<std::string>(obj->value);
                 break;
             case DOUBLE:
-                std::cout << std::get<double>(obj->value);
+                std::cout << std::setprecision(16) << std::get<double>(obj->value);
                 if(int(std::get<double>(obj->value)) == std::get<double>(obj->value)){
                     std::cout<<".0";
                 }
