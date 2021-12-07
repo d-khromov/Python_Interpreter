@@ -45,7 +45,7 @@ PyObject *Bool::operator||(const Bool &h) const {
 }
 
 Bool::Bool(const Int& o) {
-    value = bool(std::get<uint64_t>(o.value));
+    value = bool(std::get<Int::val_type>(o.value));
 }
 
 Bool::Bool(const Double &o) {

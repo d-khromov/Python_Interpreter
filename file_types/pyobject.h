@@ -22,7 +22,7 @@ using ptr = typename std::shared_ptr<PyObject>;
 using cptr = typename std::shared_ptr<const PyObject>;
 
 using Variable = typename std::variant<
-        uint64_t, std::string, double, bool, std::vector<ptr>
+        int64_t, std::string, double, bool, std::vector<ptr>
 >;
 
 class PyObject{

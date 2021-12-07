@@ -84,7 +84,7 @@ PyObject* List::operator+(const List& o) const{
 }
 PyObject* List::operator*(const Int& i) const{
 	List tmp(*this);
-	for(size_t j = 0; j < std::get<uint64_t>(i.value); ++j){
+	for(size_t j = 0; j < std::get<Int::val_type>(i.value); ++j){
 		tmp.extend(tmp);
 	}
 	return new List(std::move(tmp));

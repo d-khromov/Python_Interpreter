@@ -136,7 +136,7 @@ ptr TrySize(const cptr& lhs){
     const Type * pl = dynamic_cast<const Type*>(lhs.get());
     if(pl != nullptr){
         auto b = dynamic_cast<const Int*>(pl->size())->value;
-        return std::make_shared<Int>(std::get<uint64_t>(b));
+        return std::make_shared<Int>(std::get<Int::val_type>(b));
     }else if constexpr (sizeof...(oTypes) == 0) {
         return {nullptr};
     }else{

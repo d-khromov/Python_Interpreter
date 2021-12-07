@@ -14,7 +14,7 @@ private:
 public:
     using PyObject::value;
     BaseTypes type = INT;
-    typedef uint64_t val_type;
+    typedef int64_t val_type;
     Int() = default;
 
 	Int(const Int& other);
@@ -23,7 +23,7 @@ public:
 	Int(Int&& other);
 	Int& operator=(Int&& other);
 	
-	Int(uint64_t val);
+	Int(Int::val_type val);
 
 	~Int() = default;
 
