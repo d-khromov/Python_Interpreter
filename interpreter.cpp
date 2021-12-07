@@ -1,5 +1,6 @@
 #include "interpreter.h"
 
+
 std::unordered_map<std::string, size_t> builtin_func_names = {
         {"print", 0}
 };
@@ -167,37 +168,85 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                 }
                 break;
             }
+            case BUILD_LIST:{
+                auto list = std::make_shared<List>(List());
+                for(size_t i=arg-1; i>-1;i--){
+                    list->insert(i, frame->Pop().get());
+                }
+                frame->Push(list);
+                break;
+            }
             case COMPARE_OP:{
                 ptr right = frame->Pop();
                 ptr left = frame->Top();
                 ptr ret=nullptr;
                 switch(arg){
                     case 0:{
-                        ret= TryIsLess<Int, Double>(right, left);
+                        ret= TryIsLess<Int, Double>(left, right);
                         break;
                     }
                     case 1:{
-                        ret= TryIsLessOrEqual<Int, Double>(right, left);
+                        ret= TryIsLessOrEqual<Int, Double>(left, right);
                         break;
                     }
                     case 2:{
-                        ret= TryIsEqual<Int, Double, String>(right, left);
+                        ret= TryIsEqual<Int, Double, String>(left, right);
                         break;
                     }
                     case 3:{
-                        ret= TryNotEqual<Int, Double, String>(right, left);
+                        ret= TryNotEqual<Int, Double, String>(left, right);
                         break;
                     }
                     case 4:{
-                        ret= TryIsGreater<Int, Double>(right, left);
+                        ret= TryIsGreater<Int, Double>(left, right);
                         break;
                     }
                     case 5:{
-                        ret= TryIsGreaterOrEqual<Int, Double>(right, left);
+                        ret= TryIsGreaterOrEqual<Int, Double>(left, right);
                         break;
                     }
                 }
                 frame->Push(ret);
+                break;
+            }
+            case JUMP_FORWARD:{
+                frame->cur_instr+=2*arg;
+                break;
+            }
+            case JUMP_IF_FALSE_OR_POP:{
+                ptr top = frame->Top();
+                if(!std::get<bool>(top->value)){
+                    frame->cur_instr = 2*arg-1;
+                    break;
+                }
+                frame->Pop();
+                break;
+            }
+            case JUMP_IF_TRUE_OR_POP:{
+                ptr top = frame->Top();
+                if(std::get<bool>(top->value)){
+                    frame->cur_instr = 2*arg-1;
+                    break;
+                }
+                frame->Pop();
+                break;
+            }
+            case JUMP_ABSOLUTE:{
+                frame->cur_instr = 2*arg-1;
+                break;
+            }
+            case POP_JUMP_IF_FALSE:{
+                ptr top = frame->Pop();
+                if(!std::get<bool>(top->value)){
+                    frame->cur_instr = 2*arg-1;
+                }
+                break;
+            }
+            case POP_JUMP_IF_TRUE:{
+                ptr top = frame->Pop();
+                if(std::get<bool>(top->value)){
+                    frame->cur_instr = 2*arg-1;
+                }
                 break;
             }
             case LOAD_GLOBAL:{
@@ -249,8 +298,14 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                         locals[var_names[arg-1-i]] = frame->Pop();
                     }
                 }
+                frame->Pop();
 
                 frame_ptr new_frame = std::make_shared<Frame>(function->code, frame->globals, locals, frame.get());
+                if(!frame->prev_frame){
+                    for(auto el:frame->locals){
+                        new_frame->globals.insert(el);
+                    }
+                }
                 RunFrame(new_frame);
                 if(!frame_stack.empty()){
                     frame = frame_stack.back();
@@ -259,16 +314,27 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                 }
                 break;
             }
+            case LIST_APPEND:{
+                ptr v = frame->Pop();
+                TryAppend(frame->Top(), v);
+                break;
+            }
+            case LIST_EXTEND:{
+                ptr v = frame->Pop();
+                TryExtend(frame->Top(), v);
+                break;
+            }
         }
         frame->cur_instr++;
     }
 }
 
-void Interpreter::CallBuiltinFunction(const frame_ptr &f, std::string name, size_t arg, bool kwargs) {
+void Interpreter::CallBuiltinFunction(const frame_ptr &f, const std::string& name, size_t arg, bool kwargs) {
     std::vector<ptr> args;
     for(size_t i=0; i<arg; ++i){
         args.push_back(f->Pop());
     }
+    f->Pop();
     ptr retval = nullptr;
 
     size_t f_code = builtin_func_names[name];

@@ -55,7 +55,7 @@ ptr TryAnd(const cptr& lhs, const cptr& rhs);
 
 ptr TryOr(const cptr& lhs, const cptr& rhs);
 
-ptr TryAppend(const ptr& list, const cptr& rhs);
+ptr TryAppend(const ptr& list, const ptr& rhs);
 
 ptr TryInsert(const ptr& list, const ptr& rhs, const cptr& obj);
 
