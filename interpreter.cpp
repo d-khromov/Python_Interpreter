@@ -5,6 +5,19 @@ std::unordered_map<std::string, size_t> builtin_func_names = {
         {"print", 0}
 };
 
+std::unordered_map<std::string, size_t> builtin_list_methods = {
+        {"append", 0},
+        {"insert", 1},
+        {"clear", 2},
+        {"copy", 3}
+};
+
+std::unordered_map<std::string, size_t> builtin_string_methods = {
+        {"lower", 0},
+        {"upper", 1},
+        {"title", 2}
+};
+
 void Interpreter::RunCode(PyCodeObject* code, const std::unordered_map<std::string, ptr>& globals) {
     frame = std::make_shared<Frame>(code, globals);
     MakeBuiltins(frame);
@@ -74,7 +87,7 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                 break;
             }
             case UNARY_NEGATIVE:{
-                frame->SetTop(TryMinus<PyObject>(frame->Top()));
+                frame->SetTop(TryMinus<Int, Double>(frame->Top()));
                 break;
             }
             case UNARY_NOT:{
@@ -107,6 +120,30 @@ void Interpreter::RunFrame(const frame_ptr& f) {
             }
             case GET_LEN:{
                 frame->Push(TrySize<String>(frame->Top()));
+                break;
+            }
+            case INPLACE_ADD:{
+                ptr t1 = frame->Pop();
+                ptr t2 = frame->Top();
+                TryInplaceAdd<Int, Double, String, Bool>(t1, t2);
+                break;
+            }
+            case INPLACE_SUBTRACT:{
+                ptr t1 = frame->Pop();
+                ptr t2 = frame->Top();
+                TryInplaceSubtract<Int, Double, Bool>(t1, t2);
+                break;
+            }
+            case INPLACE_MULTIPLY:{
+                ptr t1 = frame->Pop();
+                ptr t2 = frame->Top();
+                TryInplaceMultiply<Int, Double>(t1, t2);
+                break;
+            }
+            case INPLACE_TRUE_DIVIDE:{
+                ptr t1 = frame->Pop();
+                ptr t2 = frame->Top();
+                TryInplaceDivide<Int, Double>(t1, t2);
                 break;
             }
             case BINARY_AND:{
@@ -319,6 +356,28 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                 TryAppend(frame->Top(), v);
                 break;
             }
+            case LOAD_METHOD:{
+                auto name = std::make_shared<String>(frame->code->names[arg]);
+                auto obj = frame->Pop();
+                if(CheckMethod(obj, std::get<std::string>(name->value))){
+                    std::shared_ptr<PyFunction> function = make_function(nullptr, name);
+                    frame->Push(function);
+                    frame->Push(obj);
+                    break;
+                }
+                frame->Push(nullptr);
+                frame->Push(obj);
+                break;
+            }
+            case CALL_METHOD:{
+                auto method = std::make_shared<PyFunction>(*dynamic_cast<PyFunction*>(frame->Peek(arg+1).get()));
+                ptr obj = frame->Peek(arg);
+                if(CheckMethod(obj, method->name)){
+                    CallBuiltinMethod(frame, method->name, obj, arg);
+                    break;
+                }
+                break;
+            }
             case LIST_EXTEND:{
                 ptr v = frame->Pop();
                 TryExtend(frame->Top(), v);
@@ -334,6 +393,7 @@ void Interpreter::CallBuiltinFunction(const frame_ptr &f, const std::string& nam
     for(size_t i=0; i<arg; ++i){
         args.push_back(f->Pop());
     }
+    std::reverse(args.begin(), args.end());
     f->Pop();
     ptr retval = nullptr;
 
@@ -345,5 +405,72 @@ void Interpreter::CallBuiltinFunction(const frame_ptr &f, const std::string& nam
         }
     }
 
+    frame->Push(retval);
+}
+
+bool Interpreter::CheckMethod(ptr obj, const std::string& name){
+    switch(obj->type){
+        case LIST:
+            if(builtin_list_methods.count(name)==1){
+                return true;
+            }
+            return false;
+        case STRING:
+            if(builtin_string_methods.count(name)==1){
+                return true;
+            }
+            return false;
+    }
+}
+
+void Interpreter::CallBuiltinMethod(const frame_ptr& f, const std::string& name, const ptr& obj, size_t arg){
+    std::vector<ptr> args;
+    for(size_t i=0; i<arg; ++i){
+        args.push_back(f->Pop());
+    }
+    std::reverse(args.begin(), args.end());
+    f->Pop();
+    f->Pop();
+    ptr retval = nullptr;
+
+    switch(obj->type){
+        case LIST:{
+            switch (builtin_list_methods[name]) {
+                case 0:{
+                    obj->append(args[0].get());
+                    break;
+                }
+                case 1:{
+                    obj->insert(args[0].get(), args[1].get());
+                    break;
+                }
+                case 2:{
+                    obj->clear();
+                    break;
+                }
+                case 3:{
+                    retval = std::shared_ptr<PyObject>(obj->copy());
+                }
+            }
+            break;
+        }
+        case STRING:{
+            switch (builtin_list_methods[name]) {
+                case 0:{
+                    obj->lower();
+                    break;
+                }
+                case 1:{
+                    obj->upper();
+                    break;
+                }
+                case 2:{
+                    obj->title();
+                    break;
+                }
+            }
+            break;
+        }
+    }
     frame->Push(retval);
 }

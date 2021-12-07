@@ -23,6 +23,18 @@ template<class Type, class ...oTypes>
 ptr TryMinus(const cptr& lhs);
 
 template<class Type, class ...oTypes>
+ptr TryInplaceAdd(const cptr& lhs, const cptr& rhs);
+
+template<class Type, class ...oTypes>
+ptr TryInplaceSubtract(const cptr& lhs, const cptr& rhs);
+
+template<class Type, class ...oTypes>
+ptr TryInplaceMultiply(const cptr& lhs, const cptr& rhs);
+
+template<class Type, class ...oTypes>
+ptr TryInplaceDivide(const cptr& lhs, const cptr& rhs);
+
+template<class Type, class ...oTypes>
 ptr TrySize(const cptr& lhs);
 
 ptr TryLower(const cptr& lhs);
@@ -128,6 +140,62 @@ ptr TryMinus(const cptr& lhs){
         return {nullptr};
     }else{
         return TryMinus<oTypes...>(lhs);
+    }
+};
+
+template<class Type, class ...oTypes>
+ptr TryInplaceAdd(const ptr& lhs, const cptr& rhs){
+    Type * pl = dynamic_cast<Type*>(lhs.get());
+    const Type * pr = dynamic_cast<const Type*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        (*pl)+=(*pr);
+        return lhs;
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return {nullptr};
+    }else{
+        return TryAdd<oTypes...>(lhs, rhs);
+    }
+};
+
+template<class Type, class ...oTypes>
+ptr TryInplaceSubtract(const ptr& lhs, const cptr& rhs){
+    Type * pl = dynamic_cast<Type*>(lhs.get());
+    const Type * pr = dynamic_cast<const Type*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        (*pl)-=(*pr);
+        return lhs;
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return {nullptr};
+    }else{
+        return TryAdd<oTypes...>(lhs, rhs);
+    }
+};
+
+template<class Type, class ...oTypes>
+ptr TryInplaceMultiply(const ptr& lhs, const cptr& rhs){
+    Type * pl = dynamic_cast<Type*>(lhs.get());
+    const Type * pr = dynamic_cast<const Type*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        (*pl)*=(*pr);
+        return lhs;
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return {nullptr};
+    }else{
+        return TryAdd<oTypes...>(lhs, rhs);
+    }
+};
+
+template<class Type, class ...oTypes>
+ptr TryInplaceDivide(const ptr& lhs, const cptr& rhs){
+    Type * pl = dynamic_cast<Type*>(lhs.get());
+    const Type * pr = dynamic_cast<const Type*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        (*pl)/=(*pr);
+        return lhs;
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return {nullptr};
+    }else{
+        return TryAdd<oTypes...>(lhs, rhs);
     }
 };
 

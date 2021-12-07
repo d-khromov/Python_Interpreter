@@ -22,6 +22,8 @@ public:
     void RunFrame(const frame_ptr&);
     void MakeBuiltins(const frame_ptr&);
     void CallBuiltinFunction(const frame_ptr&, const std::string&, size_t, bool kwargs=false);
+    bool CheckMethod(ptr, const std::string&);
+    void CallBuiltinMethod(const frame_ptr&, const std::string&, const ptr&, size_t);
 };
 
 #endif // INTERPRETER_H
