@@ -74,7 +74,7 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                 break;
             }
             case UNARY_NEGATIVE:{
-                frame->SetTop(TryMinus<PyObject>(frame->Top()));
+                frame->SetTop(TryMinus<Int, Double>(frame->Top()));
                 break;
             }
             case UNARY_NOT:{
@@ -107,6 +107,13 @@ void Interpreter::RunFrame(const frame_ptr& f) {
             }
             case GET_LEN:{
                 frame->Push(TrySize<String>(frame->Top()));
+                break;
+            }
+            case INPLACE_ADD:{
+                ptr t1 = frame->Pop();
+                ptr t2 = frame->Top();
+                frame->SetTop(TryInplaceAdd<Int, Double, String, Bool>(t1, t2));
+                break;
                 break;
             }
             case BINARY_AND:{

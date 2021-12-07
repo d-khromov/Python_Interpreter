@@ -11,13 +11,16 @@ void print(const std::vector<ptr>& objects, std::string sep, std::string end){
                 break;
             case DOUBLE:
                 std::cout << std::get<double>(obj->value);
+                if(int(std::get<double>(obj->value)) == std::get<double>(obj->value)){
+                    std::cout<<".0";
+                }
                 break;
             case BOOL:
                 std::cout << std::get<bool>(obj->value);
                 break;
             case LIST: {
                 std::cout << "[";
-                print(std::get<std::vector<ptr>>(obj->value), ", ", "");
+                //print(std::get<std::vector<ptr>>(obj->value), ", ", "");
                 std::cout << "]";
                 break;
             }

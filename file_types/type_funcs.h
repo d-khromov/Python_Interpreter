@@ -23,6 +23,18 @@ template<class Type, class ...oTypes>
 ptr TryMinus(const cptr& lhs);
 
 template<class Type, class ...oTypes>
+ptr TryInplaceAdd(const cptr& lhs, const cptr& rhs);
+
+template<class Type, class ...oTypes>
+ptr TryInplaceSubtract(const cptr& lhs, const cptr& rhs);
+
+template<class Type, class ...oTypes>
+ptr TryInplaceMultiply(const cptr& lhs, const cptr& rhs);
+
+template<class Type, class ...oTypes>
+ptr TryInplaceDivide(const cptr& lhs, const cptr& rhs);
+
+template<class Type, class ...oTypes>
 ptr TrySize(const cptr& lhs);
 
 ptr TryLower(const cptr& lhs);
@@ -131,6 +143,60 @@ ptr TryMinus(const cptr& lhs){
     }
 };
 
+template<class Type, class ...oTypes>
+ptr TryInplaceAdd(const ptr& lhs, const cptr& rhs){
+    Type * pl = dynamic_cast<Type*>(lhs.get());
+    const Type * pr = dynamic_cast<const Type*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        (*pl)+=(*pr);
+        return lhs;
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return {nullptr};
+    }else{
+        return TryAdd<oTypes...>(lhs, rhs);
+    }
+};
+
+/*
+template<class Type, class ...oTypes>
+ptr TryInplaceSubtract(const cptr& lhs, const cptr& rhs){
+    const Type * pl = dynamic_cast<const Type*>(lhs.get());
+    const Type * pr = dynamic_cast<const Type*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        return std::shared_ptr<PyObject>(*pl-=*pr);
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return {nullptr};
+    }else{
+        return TrySubtract<oTypes...>(lhs, rhs);
+    }
+};
+
+template<class Type, class ...oTypes>
+ptr TryInplaceMultiply(const cptr& lhs, const cptr& rhs){
+    const Type * pl = dynamic_cast<const Type*>(lhs.get());
+    const Type * pr = dynamic_cast<const Type*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        return std::shared_ptr<PyObject>(*pl*=*pr);
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return {nullptr};
+    }else{
+        return TryMultiply<oTypes...>(lhs, rhs);
+    }
+};
+
+template<class Type, class ...oTypes>
+ptr TryInplaceDivide(const cptr& lhs, const cptr& rhs){
+    const Type * pl = dynamic_cast<const Type*>(lhs.get());
+    const Type * pr = dynamic_cast<const Type*>(rhs.get());
+    if(pl != nullptr && pr != nullptr){
+        return std::shared_ptr<PyObject>(*pl/=*pr);
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return {nullptr};
+    }else{
+        return TryDivide<oTypes...>(lhs, rhs);
+    }
+};
+*/
 template<class Type, class ...oTypes>
 ptr TrySize(const cptr& lhs){
     const Type * pl = dynamic_cast<const Type*>(lhs.get());
