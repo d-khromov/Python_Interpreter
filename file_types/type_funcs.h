@@ -37,12 +37,6 @@ ptr TryInplaceDivide(const cptr& lhs, const cptr& rhs);
 template<class Type, class ...oTypes>
 ptr TrySize(const cptr& lhs);
 
-ptr TryLower(const cptr& lhs);
-
-ptr TryUpper(const cptr& lhs);
-
-ptr TryTitle(const cptr& lhs);
-
 template<class Type, class ...oTypes>
 ptr TryIsEqual(const cptr& lhs, const cptr& rhs);
 
@@ -66,16 +60,6 @@ ptr TryNot(const cptr& lhs);
 ptr TryAnd(const cptr& lhs, const cptr& rhs);
 
 ptr TryOr(const cptr& lhs, const cptr& rhs);
-
-ptr TryAppend(const ptr& list, const ptr& rhs);
-
-ptr TryInsert(const ptr& list, const ptr& rhs, const cptr& obj);
-
-ptr TryClear(const ptr& list);
-
-ptr TryCopy(const cptr& list);
-
-ptr TryExtend(const ptr& lhs, const ptr& rhs);
 
 std::shared_ptr<PyFunction> make_function(const ptr& code, const ptr& name);
 

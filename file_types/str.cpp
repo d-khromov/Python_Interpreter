@@ -36,34 +36,28 @@ char& String::operator[](const Int& i){
 const PyObject* String::size() const{
     return new Int(std::get<std::string>(value).size());
 }
-PyObject* String::lower() const {
-    std::string tmp(std::get<std::string>(value));
-	for(size_t i = 0; i < tmp.size(); i++){
-		tmp[i] = std::tolower(tmp[i]);
+void String::lower() {
+    auto s = std::get<std::string>(value);
+	for(size_t i = 0; i < s.size(); i++){
+		s[i] = std::tolower(s[i]);
 	}
-    auto * p = new String(tmp);
-	return p;
 }
-PyObject* String::upper() const {
-    std::string tmp(std::get<std::string>(value));
-    for(size_t i = 0; i < tmp.size(); i++){
-        tmp[i] = std::toupper(tmp[i]);
+void String::upper() {
+    auto s = std::get<std::string>(value);
+    for(size_t i = 0; i < s.size(); i++){
+        s[i] = std::toupper(s[i]);
     }
-    auto * p = new String(tmp);
-    return p;
 }
-PyObject* String::title() const{
-    std::string tmp(std::get<std::string>(value));
-	for(size_t i = 0; i < tmp.size(); i++){
-		bool make_upper = (i==0 || i == tmp.size() - 1 || (tmp[i-1] == ' '));
+void String::title(){
+    auto s = std::get<std::string>(value);
+	for(size_t i = 0; i < s.size(); i++){
+		bool make_upper = (i==0 || i == s.size() - 1 || (s[i-1] == ' '));
 		if(make_upper){
-			tmp[i] = std::toupper(tmp[i]);
+			s[i] = std::toupper(s[i]);
 		}else{
-            tmp[i] = std::toupper(tmp[i]);
+            s[i] = std::toupper(s[i]);
 		}
 	}
-    auto * p = new String(tmp);
-	return p;
 }
 
 PyObject* String::operator+(const String& o) const{

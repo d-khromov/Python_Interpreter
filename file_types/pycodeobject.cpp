@@ -1,6 +1,5 @@
 #include "pycodeobject.h"
 #include <string>
-#include <iostream> ///////////////////////////////////////////////////////////
 
 std::string home_dir = "../";
 

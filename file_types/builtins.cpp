@@ -21,7 +21,7 @@ void print(const std::vector<ptr>& objects, std::string sep, std::string end){
                 break;
             case LIST: {
                 std::cout << "[";
-                //print(std::get<std::vector<ptr>>(obj->value), ", ", "");
+                print(std::get<std::vector<ptr>>(obj->value), ", ", "");
                 std::cout << "]";
                 break;
             }

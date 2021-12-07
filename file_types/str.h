@@ -26,9 +26,9 @@ public:
 	char& operator[](const Int& i);
 	
 	const PyObject* size() const;
-	PyObject* lower() const;
-	PyObject* upper() const;
-	PyObject* title() const;
+	void lower();
+	void upper();
+	void title();
 
 	PyObject* operator+(const String& o) const;
 	String& operator+=(const String& o);
