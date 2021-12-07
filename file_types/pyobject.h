@@ -56,9 +56,9 @@ public:
 
     // String
     virtual const PyObject* size() const;
-    virtual PyObject* lower() const;
-    virtual PyObject* upper() const;
-    virtual PyObject* title() const;
+    virtual void lower();
+    virtual void upper();
+    virtual void title();
 
     // List
     virtual void append(PyObject*);

@@ -23,7 +23,7 @@ public:
     void MakeBuiltins(const frame_ptr&);
     void CallBuiltinFunction(const frame_ptr&, const std::string&, size_t, bool kwargs=false);
     bool CheckMethod(ptr, const std::string&);
-    void CallBuiltinMethod(const frame_ptr&, const std::string&, const ptr&, size_t);
+    void CallBuiltinMethod(const frame_ptr&, const std::string&, ptr&, size_t);
 };
 
 #endif // INTERPRETER_H

@@ -28,17 +28,11 @@ const PyObject *PyObject::size() const {
     return nullptr;
 }
 
-PyObject *PyObject::lower() const {
-    return nullptr;
-}
+void PyObject::lower(){};
 
-PyObject *PyObject::upper() const {
-    return nullptr;
-}
+void PyObject::upper(){};
 
-PyObject *PyObject::title() const {
-    return nullptr;
-}
+void PyObject::title(){};
 
 PyObject *PyObject::operator!() const {
     return nullptr;
