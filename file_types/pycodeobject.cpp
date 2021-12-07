@@ -19,12 +19,11 @@ ptr convert(ItType it){
         ptr b = std::make_shared<Bool>(it->template get<Bool::val_type>());
         return b;
     }else if(it->is_array()){
-        std::shared_ptr<List> tmp = std::make_shared<List>();
+        auto tmp = new List();
         for(auto i = it->begin(); i != it->end(); ++i){
-            auto x = convert<decltype(i)>(i);
-            tmp->append(x.get());
+            tmp->append(convert<decltype(i)>(i).get());
         }
-        return {nullptr};
+        return ptr(tmp);
     }else if(it->is_string()){
         ptr b = std::make_shared<String>(it->template get<String::val_type>());
         return b;
