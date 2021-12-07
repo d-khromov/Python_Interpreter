@@ -1,20 +1,34 @@
 #include "pycodeobject.h"
 #include <string>
+#include <iostream> ///////////////////////////////////////////////////////////
 
 std::string home_dir = "../";
 
 template <class ItType >
 ptr convert(ItType it){
     if(it->is_number_integer()){
-        return std::make_shared<Int>(it->template get<Int::val_type>());
+        ptr b = std::make_shared<Int>(it->template get<Int::val_type>());
+        b->type = INT;
+        return b;
     }else if(it->is_number_float()){
-        return std::make_shared<Double>(it->template get<Double::val_type>());
+        ptr b = std::make_shared<Double>(it->template get<Double::val_type>());
+        b->type = DOUBLE;
+        return b;
     }else if(it->is_boolean()){
-        return std::make_shared<Bool>(it->template get<Bool::val_type>());
+        ptr b = std::make_shared<Bool>(it->template get<Bool::val_type>());
+        b->type = BOOL;
+        return b;
+    }else if(it->is_array()){
+//        std::cout << typeid(*it).name();
+        return {nullptr};
     }else if(it->is_string()){
-        return std::make_shared<String>(it->template get<String::val_type>());
+        ptr b = std::make_shared<String>(it->template get<String::val_type>());
+        b->type = STRING;
+        return b;
     }else if(it->is_object()){
-        return std::make_shared<PyCodeObject>(*it);
+        ptr b = std::make_shared<PyCodeObject>(*it);
+        b->type = CODEOBJECT;
+        return b;
     }
     return std::make_shared<Int>(0);
 }
