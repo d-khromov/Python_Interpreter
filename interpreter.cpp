@@ -2,7 +2,9 @@
 
 
 std::unordered_map<std::string, size_t> builtin_func_names = {
-        {"print", 0}
+        {"print", 0},
+        {"range", 1},
+        {"len", 2}
 };
 
 std::unordered_map<std::string, size_t> builtin_list_methods = {
@@ -399,10 +401,26 @@ void Interpreter::CallBuiltinFunction(const frame_ptr &f, const std::string& nam
 
     size_t f_code = builtin_func_names[name];
     switch(f_code){
-        case 0:{
+        case 0:
             print(args);
             break;
-        }
+        case 1:
+            if(args.size() == 1) retval = range(
+                    0,
+                    std::get<int64_t>(args[0]->value),
+                    1);
+            if(args.size() == 2) retval = range(
+                    std::get<int64_t>(args[0]->value),
+                    std::get<int64_t>(args[1]->value),
+                    1);
+            if(args.size() == 3) retval = range(
+                    std::get<int64_t>(args[1]->value),
+                    std::get<int64_t>(args[0]->value),
+                    std::get<int64_t>(args[2]->value));
+            break;
+        case 2:
+            retval = len(args[0]);
+            break;
     }
 
     frame->Push(retval);

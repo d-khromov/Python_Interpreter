@@ -32,3 +32,34 @@ void print(const std::vector<ptr>& objects, std::string sep, std::string end){
     }
     std::cout<<end;
 }
+
+std::shared_ptr<List> range(int64_t start, int64_t stop, int64_t step){
+    auto list = std::make_shared<List>(List());
+    Int arg;
+    if(step>0){
+        for(size_t i=start; i<stop; i+=step){
+            arg = Int(i);
+            list->append(&arg);
+        }
+    }
+    if(step<0){
+        for(size_t i=start; i>stop; i+=step){
+            arg = Int(i);
+            list->append(&arg);
+        }
+    }
+    return list;
+}
+
+std::shared_ptr<Int> len(const ptr& obj){
+    auto length = std::make_shared<Int>(Int(0));
+    switch (obj->type){
+        case LIST:
+            *length = Int(std::get<std::vector<ptr>>(obj->value).size());
+            break;
+        case STRING:
+            length = std::make_shared<Int>(*dynamic_cast<const Int*>(obj->size()));
+            break;
+    }
+    return length;
+}

@@ -10,8 +10,6 @@
 #ifndef INTERPRETER_H
 #define INTERPRETER_H
 
-using frame_ptr = typename std::shared_ptr<Frame>;
-
 class Interpreter{
 private:
     std::vector<frame_ptr> frame_stack;

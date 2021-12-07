@@ -3,6 +3,10 @@
 #ifndef PYTHON_INTERPRETER_FRAME_H
 #define PYTHON_INTERPRETER_FRAME_H
 
+class Frame;
+
+using frame_ptr = typename std::shared_ptr<Frame>;
+
 class Frame{
 private:
     bool running;

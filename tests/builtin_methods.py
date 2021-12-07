@@ -13,5 +13,5 @@ print("a.append(100); a =", a)
 b = a.copy()
 a = [1, 2, 3]
 print("b = a.copy; a = [1,2,3]; b =", b)
-print("a.clear(); a=  ", a.clear())
+print("a.clear(); a =", a.clear())
 
