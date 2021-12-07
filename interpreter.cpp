@@ -168,6 +168,14 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                 }
                 break;
             }
+            case BUILD_LIST:{
+                auto list = std::make_shared<List>(List());
+                for(size_t i=arg-1; i>-1;i--){
+                    list->insert(i, frame->Pop().get());
+                }
+                frame->Push(list);
+                break;
+            }
             case COMPARE_OP:{
                 ptr right = frame->Pop();
                 ptr left = frame->Top();
@@ -306,12 +314,22 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                 }
                 break;
             }
+            case LIST_APPEND:{
+                ptr v = frame->Pop();
+                TryAppend(frame->Top(), v);
+                break;
+            }
+            case LIST_EXTEND:{
+                ptr v = frame->Pop();
+                TryExtend(frame->Top(), v);
+                break;
+            }
         }
         frame->cur_instr++;
     }
 }
 
-void Interpreter::CallBuiltinFunction(const frame_ptr &f, std::string name, size_t arg, bool kwargs) {
+void Interpreter::CallBuiltinFunction(const frame_ptr &f, const std::string& name, size_t arg, bool kwargs) {
     std::vector<ptr> args;
     for(size_t i=0; i<arg; ++i){
         args.push_back(f->Pop());

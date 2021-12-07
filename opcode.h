@@ -45,6 +45,7 @@
 #define DELETE_GLOBAL                    98
 #define LOAD_CONST                      100
 #define LOAD_NAME                       101
+#define BUILD_LIST                      103
 #define COMPARE_OP                      107
 #define JUMP_FORWARD                    110
 #define JUMP_IF_FALSE_OR_POP            111
@@ -58,5 +59,7 @@
 #define DELETE_FAST                     126
 #define CALL_FUNCTION                   131
 #define MAKE_FUNCTION                   132
+#define LIST_APPEND                     145
+#define LIST_EXTEND                     162
 
 #endif //PYTHON_INTERPRETER_OPCODE_H

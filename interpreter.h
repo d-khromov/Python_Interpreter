@@ -21,7 +21,7 @@ public:
     void RunCode(PyCodeObject* code, const std::unordered_map<std::string, ptr>& globals={});
     void RunFrame(const frame_ptr&);
     void MakeBuiltins(const frame_ptr&);
-    void CallBuiltinFunction(const frame_ptr&, std::string, size_t, bool kwargs=false);
+    void CallBuiltinFunction(const frame_ptr&, const std::string&, size_t, bool kwargs=false);
 };
 
 #endif // INTERPRETER_H
