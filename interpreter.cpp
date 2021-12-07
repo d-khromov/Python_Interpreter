@@ -353,7 +353,7 @@ void Interpreter::RunFrame(const frame_ptr& f) {
             }
             case LIST_APPEND:{
                 ptr v = frame->Pop();
-                TryAppend(frame->Top(), v);
+                frame->Top()->append(v.get());
                 break;
             }
             case LOAD_METHOD:{
@@ -380,7 +380,7 @@ void Interpreter::RunFrame(const frame_ptr& f) {
             }
             case LIST_EXTEND:{
                 ptr v = frame->Pop();
-                TryExtend(frame->Top(), v);
+                frame->Top()->extend(v.get());
                 break;
             }
         }
@@ -431,7 +431,7 @@ void Interpreter::CallBuiltinMethod(const frame_ptr& f, const std::string& name,
     std::reverse(args.begin(), args.end());
     f->Pop();
     f->Pop();
-    ptr retval = nullptr;
+    ptr retval = obj;
 
     switch(obj->type){
         case LIST:{
@@ -455,7 +455,7 @@ void Interpreter::CallBuiltinMethod(const frame_ptr& f, const std::string& name,
             break;
         }
         case STRING:{
-            switch (builtin_list_methods[name]) {
+            switch (builtin_string_methods[name]) {
                 case 0:{
                     obj->lower();
                     break;
