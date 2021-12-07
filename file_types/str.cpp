@@ -23,10 +23,10 @@ String::String(const std::string& val){
 }
 
 const char& String::operator[](const Int& i) const {
-	return std::get<std::string>(value)[std::get<uint64_t>(i.value)];
+	return std::get<std::string>(value)[std::get<Int::val_type>(i.value)];
 }
 char& String::operator[](const Int& i){
-    return std::get<std::string>(value)[std::get<uint64_t>(i.value)];
+    return std::get<std::string>(value)[std::get<Int::val_type>(i.value)];
 }
 
 const PyObject* String::size() const{

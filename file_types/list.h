@@ -12,7 +12,7 @@ class List: public PyObject{
 public:
     using PyObject::value;
     BaseTypes type = LIST;
-    typedef  std::vector<PyObject*> val_type;
+    typedef  std::vector<ptr> val_type;
 	List() = default;
 	~List() = default;
 

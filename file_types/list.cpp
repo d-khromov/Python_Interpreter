@@ -1,13 +1,13 @@
 #include "list.h"
 
+#include <algorithm>
+
 struct Cmp{
-    bool operator()(const PyObject* a, const PyObject* b){
-        auto p = TryIsLess<Int, Double>(cptr(a), cptr(b));
+    bool operator()(const ptr& a, const ptr& b){
+        auto p = TryIsLess<Int, Double>(a, b);
         return std::get<Bool::val_type>(dynamic_cast<Bool*>(p.get())->value);
     }
 };
-
-#include <algorithm>
 
 List::List(List&& o) : List(){
 	std::swap(value, o.value);
@@ -28,10 +28,13 @@ List& List::operator=(const List& o){
 }
 
 void List::append(PyObject* item){
-	std::get<val_type>(value).push_back(item);
+	std::get<val_type>(value).push_back(std::shared_ptr<PyObject>(item));
 }
 void List::insert(const Int& i, PyObject* item){
-	std::get<val_type>(value).insert(std::get<val_type>(value).begin() + std::get<uint64_t>(i.value), item);
+	std::get<val_type>(value).insert(
+            std::get<val_type>(value).begin() + std::get<Int::val_type>(i.value),
+                        ptr(item)
+                    );
 }
 void List::clear(){
     std::get<val_type>(value).clear();
@@ -48,7 +51,7 @@ PyObject* List::index(const PyObject* obj) const{
 	size_t i = 0;
     const auto&  b = std::get<val_type>(value);
 	for(; i < b.size(); ++i){
-        auto p =TryIsEqual<Int, Double, String, List, Bool>(cptr(obj), ptr(b[i]));
+        auto p =TryIsEqual<Int, Double, String, List, Bool>(cptr(obj), b[i]);
 		if (std::get<bool>(dynamic_cast<const Bool *>(p.get())->value)){
 			break;
 		}
@@ -56,9 +59,10 @@ PyObject* List::index(const PyObject* obj) const{
 	return new Int(i);
 }
 PyObject* List::pop(const Int& i){
-	auto tmp = std::get<val_type>(value)[std::get<uint64_t>(i.value)];
-    std::get<val_type>(value).erase(std::get<val_type>(value).begin() + std::get<Int::val_type>(i.value));
-	return tmp;
+    auto iv = std::get<Int::val_type>(i.value);
+	auto tmp = std::get<val_type>(value)[iv];
+    std::get<val_type>(value).erase(std::get<val_type>(value).begin() + iv);
+	return tmp.get();
 }
 void List::remove(const PyObject& obj){
 	auto * pi = dynamic_cast<Int*>(index(&obj));
@@ -80,7 +84,7 @@ PyObject* List::operator+(const List& o) const{
 }
 PyObject* List::operator*(const Int& i) const{
 	List tmp(*this);
-	for(size_t j = 0; j < std::get<uint64_t>(i.value); ++j){
+	for(size_t j = 0; j < std::get<Int::val_type>(i.value); ++j){
 		tmp.extend(tmp);
 	}
 	return new List(std::move(tmp));
@@ -95,5 +99,5 @@ PyObject *List::operator!=(const List& o) const {
 }
 
 PyObject* List::operator[](const Int& i) const{
-    return std::get<val_type>(value)[std::get<Int::val_type>(i.value)];
+    return std::get<val_type>(value)[std::get<Int::val_type>(i.value)].get();
 }

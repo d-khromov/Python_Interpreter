@@ -4,7 +4,7 @@ void print(const std::vector<ptr>& objects, std::string sep, std::string end){
     for(auto obj:objects) {
         switch (obj->type) {
             case INT:
-                std::cout << std::get<std::uint64_t>(obj->value);
+                std::cout << std::get<std::int64_t>(obj->value);
                 break;
             case STRING:
                 std::cout << std::get<std::string>(obj->value);

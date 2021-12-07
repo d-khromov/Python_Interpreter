@@ -72,31 +72,31 @@ PyObject* Double::operator+(const Int& other) const {
     return p;
 }
 PyObject* Double::operator-(const Int& other) const {
-	auto p = new Double(std::get<uint64_t>(value) - std::get<uint64_t>(other.value));
+	auto p = new Double(std::get<Int::val_type>(value) - std::get<Int::val_type>(other.value));
     return p;
 }
 PyObject* Double::operator*(const Int& other) const{
-	auto p = new Double(std::get<uint64_t>(value) * std::get<uint64_t>(other.value));
+	auto p = new Double(std::get<Int::val_type>(value) * std::get<Int::val_type>(other.value));
     return p;
 }
 PyObject* Double::operator/(const Int& other) const{
-	auto p = new Double(std::get<double>(value) / std::get<uint64_t>(other.value));
+	auto p = new Double(std::get<double>(value) / std::get<Int::val_type>(other.value));
     return p;
 }
 Double& Double::operator+=(const Int& other){
-    value = std::get<double>(value) + std::get<uint64_t>(other.value);
+    value = std::get<double>(value) + std::get<Int::val_type>(other.value);
 	return *this;
 }
 Double& Double::operator-=(const Int& other){
-    value = std::get<double>(value) - std::get<uint64_t>(other.value);
+    value = std::get<double>(value) - std::get<Int::val_type>(other.value);
 	return *this;
 }
 Double& Double::operator*=(const Int& other){
-    value = std::get<double>(value) * std::get<uint64_t>(other.value);
+    value = std::get<double>(value) * std::get<Int::val_type>(other.value);
 	return *this;
 }
 Double& Double::operator/=(const Int& other){
-	value = value = std::get<double>(value) / std::get<uint64_t>(other.value);
+	value = value = std::get<double>(value) / std::get<Int::val_type>(other.value);
 	return *this;
 }
 
@@ -123,20 +123,20 @@ PyObject* Double::operator!=(const Double& other) const{
 
 // Compare with Int
 PyObject* Double::operator==(const Int& other) const{
-	return new Bool(std::get<double>(value) == std::get<uint64_t>(other.value));
+	return new Bool(std::get<double>(value) == std::get<Int::val_type>(other.value));
 }
 PyObject* Double::operator<=(const Int& other) const{
-	return new Bool(std::get<double>(value) <= std::get<uint64_t>(other.value));
+	return new Bool(std::get<double>(value) <= std::get<Int::val_type>(other.value));
 }
 PyObject* Double::operator<(const Int& other) const{
-	return new Bool(std::get<double>(value) < std::get<uint64_t>(other.value));
+	return new Bool(std::get<double>(value) < std::get<Int::val_type>(other.value));
 }
 PyObject* Double::operator>=(const Int& other) const{
-	return new Bool(std::get<double>(value) >= std::get<uint64_t>(other.value));
+	return new Bool(std::get<double>(value) >= std::get<Int::val_type>(other.value));
 }
 PyObject* Double::operator>(const Int& other) const{
-	return new Bool(std::get<double>(value) > std::get<uint64_t>(other.value));
+	return new Bool(std::get<double>(value) > std::get<Int::val_type>(other.value));
 }
 PyObject* Double::operator!=(const Int& other) const{
-	return new Bool(std::get<double>(value) != std::get<uint64_t>(other.value));
+	return new Bool(std::get<double>(value) != std::get<Int::val_type>(other.value));
 }

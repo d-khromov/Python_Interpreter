@@ -2,6 +2,7 @@
 #include <variant>
 #include <vector>
 #include <string>
+#include <map>
 
 #ifndef PYOBJECT_H
 #define PYOBJECT_H
@@ -13,11 +14,16 @@ enum BaseTypes {
     BOOL,
     CODEOBJECT,
     FUNCTION,
+    DICT,
 };
 
 class PyObject;
+using ptr = typename std::shared_ptr<PyObject>;
+using cptr = typename std::shared_ptr<const PyObject>;
 
-using Variable = typename std::variant<uint64_t, std::string, double, bool, std::vector<PyObject*>>;
+using Variable = typename std::variant<
+        int64_t, std::string, double, bool, std::vector<ptr>
+>;
 
 class PyObject{
 public:
@@ -67,6 +73,5 @@ public:
     virtual void sort();
 };
 
-using ptr = typename std::shared_ptr<PyObject>;
 
 #endif // PYOBJECT_H
