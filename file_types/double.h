@@ -11,9 +11,9 @@ private:
 	friend class Int;
 public:
     using PyObject::value;
-    BaseTypes type = DOUBLE;
+    using PyObject::type;
     typedef double val_type;
-	Double() = default;
+	Double();
 	
 	Double(const Double& other);
 	Double& operator=(const Double& other);

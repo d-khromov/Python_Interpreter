@@ -1,6 +1,10 @@
 #include "double.h"
 
-Double::Double(const Double& other): PyObject() {
+Double::Double(): PyObject() {
+    type = DOUBLE;
+}
+
+Double::Double(const Double& other): Double(){
     value = other.value;
 };
 
@@ -9,11 +13,11 @@ Double& Double::operator=(const Double& other){
 	return *this;
 }
 
-Double::Double(double val): PyObject(){
+Double::Double(double val): Double(){
     value = val;
 };
 
-Double::Double(Double&& o): PyObject(){
+Double::Double(Double&& o): Double(){
     value = 0.0;
     std::swap(value, o.value);
 }

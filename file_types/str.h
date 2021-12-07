@@ -8,10 +8,10 @@
 
 class String: public PyObject{
 public:
-    BaseTypes type = STRING;
+    using PyObject::type;
     typedef std::string val_type;
     using PyObject::value;
-	String() = default;
+	String();
 	~String() = default;
 	
 	String(const String& o);

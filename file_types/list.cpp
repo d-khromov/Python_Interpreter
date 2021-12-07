@@ -9,6 +9,11 @@ struct Cmp{
     }
 };
 
+List::List() : PyObject(){
+    value = {};
+    type = LIST;
+}
+
 List::List(List&& o) : List(){
 	std::swap(value, o.value);
 }

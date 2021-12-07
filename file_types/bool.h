@@ -10,10 +10,11 @@ class Bool: public PyObject{
     friend class Int;
     friend class Double;
 public:
-    BaseTypes type = BOOL;
     typedef bool val_type;
+    using PyObject::type;
     using PyObject::value;
-    Bool() = default;
+
+    Bool();
     ~Bool() = default;
     Bool(Bool&&);
     Bool& operator=(Bool&&);

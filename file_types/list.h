@@ -11,9 +11,9 @@
 class List: public PyObject{
 public:
     using PyObject::value;
-    BaseTypes type = LIST;
+    using PyObject::type;
     typedef  std::vector<ptr> val_type;
-	List() = default;
+	List();
 	~List() = default;
 
 	List(List&& o);

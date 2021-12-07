@@ -19,7 +19,7 @@ using json = nlohmann::json;
 
 class PyCodeObject : public PyObject{
 public:
-    BaseTypes type = CODEOBJECT;
+    using PyObject::type;
 //    std::vector<std::shared_ptr<PyObject>> cellvars; // Strings
 //    std::vector co_lnotab;
 //    std::vector<std::shared_ptr<PyObject>> freevars; // Strings
@@ -36,7 +36,7 @@ public:
     std::vector<ptr> consts;
     std::vector<std::string> names;
     std::vector<std::string> var_names;
-    PyCodeObject() = default;
+    PyCodeObject();
     PyCodeObject(const char* pathname);
     PyCodeObject(const json&);
 };

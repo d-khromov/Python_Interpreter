@@ -1,13 +1,17 @@
 #include "str.h"
 
-String::String(const String& o): PyObject(){
+String::String() : PyObject(){
+    type = STRING;
+}
+
+String::String(const String& o): String(){
     value = o.value;
 };
 String& String::operator=(const String& o){
 	value = o.value;
 	return *this;
 }
-String::String(String&& o): PyObject(){
+String::String(String&& o): String(){
     value = "";
 	std::swap(value, o.value);
 }
@@ -18,7 +22,7 @@ String& String::operator=(String&& o){
 	std::swap(value, o.value);
 	return *this;
 }
-String::String(const std::string& val){
+String::String(const std::string& val) : String(){
 	value = val;	
 }
 

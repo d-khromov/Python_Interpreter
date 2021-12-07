@@ -3,13 +3,13 @@
 #ifndef PYFUNCTION_H
 #define PYFUNCTION_H
 
-class PyFunction:public PyObject{
+class PyFunction: public PyObject{
 public:
-    BaseTypes type = FUNCTION;
+    using PyObject::type;
     PyCodeObject* code;
     std::string name;
 
-    PyFunction()=default;
+    PyFunction();
     PyFunction(PyCodeObject*, std::string);
     PyFunction(PyFunction&&);
     PyFunction& operator=(PyFunction&&);

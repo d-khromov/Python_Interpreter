@@ -1,17 +1,21 @@
 #include "int.h"
 
-Int::Int(const Int& other): PyObject(){
+Int::Int() : PyObject(){
+    type = INT;
+}
+
+Int::Int(const Int& other): Int(){
     value =other.value;
 };
 Int& Int::operator=(const Int& other){
 	value = other.value;
 	return *this;
 }
-Int::Int(Int::val_type val): PyObject(){
+Int::Int(Int::val_type val): Int(){
     value = val;
 };
 
-Int::Int(Int&& o) : PyObject() {
+Int::Int(Int&& o) : Int() {
 	std::swap(value, o.value);
 }
 Int& Int::operator=(Int &&other) {

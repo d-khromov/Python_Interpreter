@@ -1,8 +1,20 @@
 #include "pyfunction.h"
 
-PyFunction::PyFunction(PyCodeObject* code, std::string name):code(code), name(std::move(name)){}
+PyFunction::PyFunction() : PyObject() {
+    type = FUNCTION;
+    code = nullptr;
+    name = "";
+}
 
-PyFunction::PyFunction(PyFunction &&other):name(other.name), code(other.code){}
+PyFunction::PyFunction(PyCodeObject* co, std::string n): PyFunction(){
+    code = co;
+    name = std::move(n);
+}
+
+PyFunction::PyFunction(PyFunction &&other):PyFunction() {
+    name = other.name;
+    code = other.code;
+}
 
 PyFunction &PyFunction::operator=(PyFunction &&other) {
     if (this == &other) return *this;
@@ -13,7 +25,10 @@ PyFunction &PyFunction::operator=(PyFunction &&other) {
     return *this;
 }
 
-PyFunction::PyFunction(const PyFunction &other):name(other.name), code(other.code) {}
+PyFunction::PyFunction(const PyFunction &other): PyFunction(){
+    name = other.name;
+    code = other.code;
+}
 
 PyFunction &PyFunction::operator=(const PyFunction &other) {
     if (this == &other) return *this;
