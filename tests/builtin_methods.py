@@ -8,6 +8,10 @@ print()
 a = [1, 2, 3, "456", "seven", [89, "ten"]]
 print("a =", a)
 print()
+print("a[4] = 7")
+a[4] = 7
+print("a =", a)
+print()
 a.insert(2, 2.5)
 print("a.insert(2, 2.5);\na =", a)
 print()

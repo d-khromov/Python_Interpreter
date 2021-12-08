@@ -148,6 +148,15 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                 TryInplaceDivide<Int, Double>(t2, t1);
                 break;
             }
+            case STORE_SUBSCR:{
+                ptr i = frame->Pop();
+                ptr list = frame->Pop();
+                ptr val = frame->Pop();
+                auto elem = list->operator[](i.get());
+                elem->value = val->value;
+                elem->type = val->type;
+                break;
+            }
             case BINARY_AND:{
                 ptr t1 = frame->Pop();
                 ptr t2 = frame->Top();
@@ -224,7 +233,7 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                 break;
             }
             case BUILD_LIST:{
-                auto list = std::make_shared<List>(List());
+                auto list = std::make_shared<List>();
                 auto tmp = Int(0);
                 for(size_t i=0; i<arg;++i){
                     list->insert(&tmp, frame->Pop().get());

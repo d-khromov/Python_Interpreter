@@ -106,6 +106,10 @@ PyObject *List::operator!=(const List& o) const {
     return new Bool(o.value != value);;
 }
 
-PyObject* List::operator[](const Int& i) const{
-    return std::get<val_type>(value)[std::get<Int::val_type>(i.value)].get();
+PyObject* List::operator[](PyObject* i){
+    auto ind = std::get<Int::val_type>(i->value);
+    if(ind < 0){
+        ind += std::get<val_type>(value).size();
+    }
+    return std::get<val_type>(value)[ind].get();
 }

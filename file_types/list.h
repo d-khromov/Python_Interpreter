@@ -31,7 +31,7 @@ public:
 	void remove(const PyObject& obj);
 	void reverse() override;
 	void sort() override;
-    PyObject* operator[](const Int& i) const;
+    PyObject* operator[](PyObject*) override;
 
     PyObject* operator+(const List&) const;
     PyObject* operator*(const Int&) const;

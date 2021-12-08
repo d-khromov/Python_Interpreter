@@ -84,4 +84,8 @@ PyObject* PyObject::pop(PyObject*){
 };
 void PyObject::remove(PyObject*){};
 void PyObject::reverse(){};
-void PyObject::sort(){};
+void PyObject::sort(){}
+
+PyObject* PyObject::operator[](PyObject *) {
+    return nullptr;
+};
