@@ -20,7 +20,7 @@ std::unordered_map<std::string, size_t> builtin_string_methods = {
         {"title", 2}
 };
 
-void Interpreter::RunCode(std::shared_ptr<PyCodeObject> code, const std::unordered_map<std::string, ptr>& globals) {
+void Interpreter::RunCode(const std::shared_ptr<PyCodeObject>& code, const std::unordered_map<std::string, ptr>& globals) {
     frame = std::make_shared<Frame>(code, globals);
     MakeBuiltins(frame);
     RunFrame(frame);
@@ -160,6 +160,12 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                 frame->SetTop(TryOr(t2, t1));
                 break;
             }
+            case GET_ITER:{
+                ptr t = frame->Top();
+                auto iter = std::make_shared<Iterator>(t);
+                frame->SetTop(iter);
+                break;
+            }
             case RETURN_VALUE:{
                 frame->retval = frame->Pop();
                 if(frame->prev_frame != nullptr){
@@ -180,8 +186,18 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                 frame->locals.erase(name);
                 break;
             }
+            case FOR_ITER:{
+                auto iter = std::dynamic_pointer_cast<Iterator, PyObject>(frame->Top());
+                if(iter->reached_end){
+                    frame->Pop();
+                    frame->cur_instr+=2*arg;
+                    break;
+                }
+                frame->Push(iter->next());
+                break;
+            }
             case LOAD_CONST:{
-                ptr v = TryCopy<Int, Double, String, Bool, List, PyFunction, PyCodeObject>(frame->code->consts[arg]);
+                ptr v = TryCopy<Int, Double, String, Bool, List, PyFunction, PyCodeObject, Iterator>(frame->code->consts[arg]);
                 frame->Push(v);
                 break;
             }
@@ -356,7 +372,7 @@ void Interpreter::RunFrame(const frame_ptr& f) {
             }
             case LIST_APPEND:{
                 ptr v = frame->Pop();
-                frame->Top()->append(v.get());
+                frame->Peek(arg-1)->append(v);
                 break;
             }
             case LOAD_METHOD:{
@@ -373,7 +389,7 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                 break;
             }
             case CALL_METHOD:{
-                auto method = std::make_shared<PyFunction>(*dynamic_cast<PyFunction*>(frame->Peek(arg+1).get()));
+                auto method = std::dynamic_pointer_cast<PyFunction, PyObject>(frame->Peek(arg+1));
                 ptr obj = frame->Peek(arg);
                 if(CheckMethod(obj, method->name)){
                     CallBuiltinMethod(frame, method->name, obj, arg);
@@ -383,7 +399,7 @@ void Interpreter::RunFrame(const frame_ptr& f) {
             }
             case LIST_EXTEND:{
                 ptr v = frame->Pop();
-                frame->Top()->extend(v.get());
+                frame->Peek(arg-1)->extend(v.get());
                 break;
             }
         }
@@ -415,8 +431,8 @@ void Interpreter::CallBuiltinFunction(const frame_ptr &f, const std::string& nam
                     std::get<int64_t>(args[1]->value),
                     1);
             if(args.size() == 3) retval = range(
-                    std::get<int64_t>(args[1]->value),
                     std::get<int64_t>(args[0]->value),
+                    std::get<int64_t>(args[1]->value),
                     std::get<int64_t>(args[2]->value));
             break;
         case 2:
@@ -440,6 +456,7 @@ bool Interpreter::CheckMethod(ptr obj, const std::string& name){
             }
             return false;
     }
+    return false;
 }
 
 void Interpreter::CallBuiltinMethod(const frame_ptr& f, const std::string& name, ptr& obj, size_t arg){
@@ -456,7 +473,7 @@ void Interpreter::CallBuiltinMethod(const frame_ptr& f, const std::string& name,
         case LIST:{
             switch (builtin_list_methods[name]) {
                 case 0:{
-                    obj->append(args[0].get());
+                    obj->append(args[0]);
                     break;
                 }
                 case 1:{

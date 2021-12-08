@@ -32,8 +32,8 @@ List& List::operator=(const List& o){
 	return *this;
 }
 
-void List::append(PyObject* item){
-    auto v = new PyObject(std::move(*item));
+void List::append(const ptr& item){
+    auto v = TryCopy<Int, Double, String, Bool, List, PyFunction, PyCodeObject, Iterator>(item);
 	std::get<val_type>(value).push_back(std::shared_ptr<PyObject>(v));
 }
 void List::insert(const PyObject* i, PyObject* item){

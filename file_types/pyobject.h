@@ -15,6 +15,7 @@ enum BaseTypes {
     CODEOBJECT,
     FUNCTION,
     DICT,
+    ITERATOR
 };
 
 class PyObject;
@@ -61,7 +62,7 @@ public:
     virtual void title();
 
     // List
-    virtual void append(PyObject*);
+    virtual void append(const ptr&);
     virtual void insert(const PyObject*, PyObject*);
     virtual void clear();
     virtual PyObject* copy() const;

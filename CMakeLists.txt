@@ -15,6 +15,7 @@ add_executable(python_interpreter main.cpp
         file_types/pycodeobject.cpp
         file_types/builtins.cpp
         file_types/type_funcs.cpp
+        file_types/iterator.cpp
         interpreter.cpp
         frame.cpp
         )

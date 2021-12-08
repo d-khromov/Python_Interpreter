@@ -69,7 +69,7 @@ PyObject* PyObject::operator>=(PyObject*) const{
 PyObject* PyObject::operator>(PyObject*) const{
     return nullptr;
 };
-void PyObject::append(PyObject*){};
+void PyObject::append(const ptr&){};
 void PyObject::insert(const PyObject *, PyObject*){};
 void PyObject::clear(){};
 PyObject* PyObject::copy() const{

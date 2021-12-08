@@ -16,7 +16,7 @@ print("a.append([11, 12]);\na =", a)
 print()
 b = a.copy()
 a = [1, 2, 3]
-print("b = a.copy\n a = [1,2,3];\nb =", b)
+print("b = a.copy; \na = [1,2,3];\nb =", b, "\na =", a)
 print()
 a.clear()
 print("a.clear() \na =", a)

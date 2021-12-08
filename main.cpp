@@ -3,7 +3,7 @@
 #include "file_types/pycodeobject.h"
 
 int main() {
-    PyCodeObject code("parser/functions.py.cjson");
+    PyCodeObject code("parser/lists.py.cjson");
 
     Interpreter py;
     py.RunCode(std::make_shared<PyCodeObject>(code));
