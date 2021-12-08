@@ -1,14 +1,16 @@
 #include "builtins.h"
 #include <iomanip>
 
-void print(const std::vector<ptr>& objects, std::string sep, std::string end){
+void print(const std::vector<ptr>& objects, std::string sep, std::string end, bool in_list){
     for(auto obj:objects) {
         switch (obj->type) {
             case INT:
                 std::cout << std::get<std::int64_t>(obj->value);
                 break;
             case STRING:
+                if(in_list) std::cout<<"'";
                 std::cout << std::get<std::string>(obj->value);
+                if(in_list) std::cout<<"'";
                 break;
             case DOUBLE:
                 std::cout << std::setprecision(16) << std::get<double>(obj->value);
@@ -21,7 +23,7 @@ void print(const std::vector<ptr>& objects, std::string sep, std::string end){
                 break;
             case LIST: {
                 std::cout << "[";
-                print(std::get<std::vector<ptr>>(obj->value), ", ", "");
+                print(std::get<std::vector<ptr>>(obj->value), ", ", "", true);
                 std::cout << "]";
                 break;
             }

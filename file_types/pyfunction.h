@@ -6,11 +6,11 @@
 class PyFunction: public PyObject{
 public:
     using PyObject::type;
-    PyCodeObject* code;
+    std::shared_ptr<PyCodeObject> code;
     std::string name;
 
     PyFunction();
-    PyFunction(PyCodeObject*, std::string);
+    PyFunction(std::shared_ptr<PyCodeObject>, std::string);
     PyFunction(PyFunction&&);
     PyFunction& operator=(PyFunction&&);
     PyFunction(const PyFunction&);

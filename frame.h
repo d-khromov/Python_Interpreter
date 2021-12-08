@@ -11,7 +11,7 @@ class Frame{
 private:
     bool running;
     ptr retval;
-    PyCodeObject* code;
+    std::shared_ptr<PyCodeObject> code;
     Frame* prev_frame;
     std::unordered_map<std::string, ptr> globals;
     std::unordered_map<std::string, ptr> locals;
@@ -20,7 +20,7 @@ private:
     size_t cur_instr;
     friend class Interpreter;
 public:
-    Frame(PyCodeObject* code,
+    Frame(std::shared_ptr<PyCodeObject> code,
           std::unordered_map<std::string, ptr>  globals={},
           std::unordered_map<std::string, ptr>  locals={},
           Frame* prev_frame= nullptr);

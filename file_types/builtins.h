@@ -6,7 +6,7 @@
 #ifndef BUILTINS_H
 #define BUILTINS_H
 
-void print(const std::vector<ptr>& objects, std::string sep=" ", std::string end="\n");
+void print(const std::vector<ptr>& objects, std::string sep=" ", std::string end="\n", bool in_list=false);
 
 std::shared_ptr<List> range(int64_t start, int64_t stop, int64_t step);
 

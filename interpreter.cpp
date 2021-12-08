@@ -20,7 +20,7 @@ std::unordered_map<std::string, size_t> builtin_string_methods = {
         {"title", 2}
 };
 
-void Interpreter::RunCode(PyCodeObject* code, const std::unordered_map<std::string, ptr>& globals) {
+void Interpreter::RunCode(std::shared_ptr<PyCodeObject> code, const std::unordered_map<std::string, ptr>& globals) {
     frame = std::make_shared<Frame>(code, globals);
     MakeBuiltins(frame);
     RunFrame(frame);
@@ -105,7 +105,7 @@ void Interpreter::RunFrame(const frame_ptr& f) {
             case BINARY_ADD:{
                 ptr t1 = frame->Pop();
                 ptr t2 = frame->Top();
-                frame->SetTop(TryAdd<Int, Double, String, Bool>(t1, t2));
+                frame->SetTop(TryAdd<Int, Double, String, Bool>(t2, t1));
                 break;
             }
             case BINARY_SUBTRACT:{
@@ -127,25 +127,25 @@ void Interpreter::RunFrame(const frame_ptr& f) {
             case INPLACE_ADD:{
                 ptr t1 = frame->Pop();
                 ptr t2 = frame->Top();
-                TryInplaceAdd<Int, Double, String, Bool>(t1, t2);
+                TryInplaceAdd<Int, Double, String, Bool>(t2, t1);
                 break;
             }
             case INPLACE_SUBTRACT:{
                 ptr t1 = frame->Pop();
                 ptr t2 = frame->Top();
-                TryInplaceSubtract<Int, Double, Bool>(t1, t2);
+                TryInplaceSubtract<Int, Double, Bool>(t2, t1);
                 break;
             }
             case INPLACE_MULTIPLY:{
                 ptr t1 = frame->Pop();
                 ptr t2 = frame->Top();
-                TryInplaceMultiply<Int, Double>(t1, t2);
+                TryInplaceMultiply<Int, Double>(t2, t1);
                 break;
             }
             case INPLACE_TRUE_DIVIDE:{
                 ptr t1 = frame->Pop();
                 ptr t2 = frame->Top();
-                TryInplaceDivide<Int, Double>(t1, t2);
+                TryInplaceDivide<Int, Double>(t2, t1);
                 break;
             }
             case BINARY_AND:{
@@ -181,7 +181,7 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                 break;
             }
             case LOAD_CONST:{
-                ptr v = frame->code->consts[arg];
+                ptr v = TryCopy<Int, Double, String, Bool, List, PyFunction, PyCodeObject>(frame->code->consts[arg]);
                 frame->Push(v);
                 break;
             }
@@ -323,7 +323,7 @@ void Interpreter::RunFrame(const frame_ptr& f) {
                 break;
             }
             case CALL_FUNCTION:{
-                auto function = std::make_shared<PyFunction>(*dynamic_cast<PyFunction*>(frame->Peek(arg).get()));
+                auto function = std::dynamic_pointer_cast<PyFunction, PyObject>(frame->Peek(arg));
 
                 if(frame->builtins.count(function->name)==1){
                     CallBuiltinFunction(frame, function->name, arg);

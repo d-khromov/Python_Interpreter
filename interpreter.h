@@ -16,7 +16,7 @@ private:
     frame_ptr frame;
 public:
     Interpreter():frame(nullptr){};
-    void RunCode(PyCodeObject* code, const std::unordered_map<std::string, ptr>& globals={});
+    void RunCode(std::shared_ptr<PyCodeObject> code, const std::unordered_map<std::string, ptr>& globals={});
     void RunFrame(const frame_ptr&);
     void MakeBuiltins(const frame_ptr&);
     void CallBuiltinFunction(const frame_ptr&, const std::string&, size_t, bool kwargs=false);
