@@ -21,6 +21,7 @@
 #define INPLACE_ADD                      55
 #define INPLACE_SUBTRACT                 56
 #define INPLACE_MULTIPLY                 57
+#define STORE_SUBSCR                     60
 #define BINARY_AND                       64
 #define BINARY_OR                        66
 #define GET_ITER                         68
