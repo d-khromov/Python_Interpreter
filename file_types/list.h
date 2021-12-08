@@ -21,7 +21,7 @@ public:
 	List(const List& o);
 	List& operator=(const List&);
 
-	void append(PyObject*);
+	void append(const ptr&);
 	void insert(const PyObject*, PyObject*) override;
 	void clear() override;
 	PyObject* copy() const override;

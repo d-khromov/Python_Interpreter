@@ -6,3 +6,4 @@
 #include "list.h"
 #include "bool.h"
 #include "pyfunction.h"
+#include "iterator.h"

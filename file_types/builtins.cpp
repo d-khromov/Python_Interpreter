@@ -37,17 +37,14 @@ void print(const std::vector<ptr>& objects, std::string sep, std::string end, bo
 
 std::shared_ptr<List> range(int64_t start, int64_t stop, int64_t step){
     auto list = std::make_shared<List>(List());
-    Int arg;
     if(step>0){
         for(size_t i=start; i<stop; i+=step){
-            arg = Int(i);
-            list->append(&arg);
+            list->append(std::make_shared<Int>(Int(i)));
         }
     }
     if(step<0){
         for(size_t i=start; i>stop; i+=step){
-            arg = Int(i);
-            list->append(&arg);
+            list->append(std::make_shared<Int>(Int(i)));
         }
     }
     return list;

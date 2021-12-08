@@ -20,7 +20,7 @@ ptr convert(ItType it){
     }else if(it->is_array()){
         auto tmp = new List();
         for(auto i = it->begin(); i != it->end(); ++i){
-            tmp->append(convert<decltype(i)>(i).get());
+            tmp->append(convert<decltype(i)>(i));
         }
         return ptr(tmp);
     }else if(it->is_string()){
