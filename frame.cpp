@@ -1,6 +1,6 @@
 #include "frame.h"
 
-Frame::Frame(PyCodeObject* code,
+Frame::Frame(std::shared_ptr<PyCodeObject> code,
              std::unordered_map<std::string, ptr> globals,
              std::unordered_map<std::string, ptr>  locals,
              Frame* prev_frame):

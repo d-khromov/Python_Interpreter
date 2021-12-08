@@ -274,4 +274,16 @@ ptr TryIsLessOrEqual(const cptr& lhs, const cptr& rhs){
     }
 }
 
+template<class Type, class ...oTypes>
+ptr TryCopy(const cptr& obj){
+    const Type * ob = dynamic_cast<const Type*>(obj.get());
+    if(ob != nullptr){
+        return std::make_shared<Type>(*ob);
+    }else if constexpr (sizeof...(oTypes) == 0) {
+        return {nullptr};
+    }else{
+        return TryCopy<oTypes...>(obj);
+    }
+}
+
 #endif // FILE_FUNCS_H

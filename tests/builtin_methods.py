@@ -1,17 +1,23 @@
-a = "aBc cjF"
+a = "aBc deF"
 print("a =", a)
 print("a.upper() =", a.upper())
 print("a.lower() =", a.lower())
 print("a.title() =", a.title())
+print()
 
-a = [1, 2, 3, "abc", [45, "de"]]
+a = [1, 2, 3, "456", "seven", [89, "ten"]]
 print("a =", a)
-a.insert(0, 10)
-print("a.insert(0, 10); a =", a)
-a.append(100)
-print("a.append(100); a =", a)
+print()
+a.insert(2, 2.5)
+print("a.insert(2, 2.5);\na =", a)
+print()
+a.append([11, 12])
+print("a.append([11, 12]);\na =", a)
+print()
 b = a.copy()
 a = [1, 2, 3]
-print("b = a.copy; a = [1,2,3]; b =", b)
-print("a.clear(); a=  ", a.clear())
-
+print("b = a.copy\n a = [1,2,3];\nb =", b)
+print()
+a.clear()
+print("a.clear() \na =", a)
+print()

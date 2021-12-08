@@ -6,7 +6,7 @@ PyFunction::PyFunction() : PyObject() {
     name = "";
 }
 
-PyFunction::PyFunction(PyCodeObject* co, std::string n): PyFunction(){
+PyFunction::PyFunction(std::shared_ptr<PyCodeObject> co, std::string n): PyFunction(){
     code = co;
     name = std::move(n);
 }

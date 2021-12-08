@@ -10,15 +10,13 @@
 #ifndef INTERPRETER_H
 #define INTERPRETER_H
 
-using frame_ptr = typename std::shared_ptr<Frame>;
-
 class Interpreter{
 private:
     std::vector<frame_ptr> frame_stack;
     frame_ptr frame;
 public:
     Interpreter():frame(nullptr){};
-    void RunCode(PyCodeObject* code, const std::unordered_map<std::string, ptr>& globals={});
+    void RunCode(std::shared_ptr<PyCodeObject> code, const std::unordered_map<std::string, ptr>& globals={});
     void RunFrame(const frame_ptr&);
     void MakeBuiltins(const frame_ptr&);
     void CallBuiltinFunction(const frame_ptr&, const std::string&, size_t, bool kwargs=false);
