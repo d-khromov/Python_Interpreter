@@ -28,17 +28,11 @@ const PyObject *PyObject::size() const {
     return nullptr;
 }
 
-PyObject *PyObject::lower() const {
-    return nullptr;
-}
+void PyObject::lower(){};
 
-PyObject *PyObject::upper() const {
-    return nullptr;
-}
+void PyObject::upper(){};
 
-PyObject *PyObject::title() const {
-    return nullptr;
-}
+void PyObject::title(){};
 
 PyObject *PyObject::operator!() const {
     return nullptr;
@@ -76,12 +70,12 @@ PyObject* PyObject::operator>(PyObject*) const{
     return nullptr;
 };
 void PyObject::append(PyObject*){};
-void PyObject::insert(PyObject*, PyObject*){};
+void PyObject::insert(const PyObject *, PyObject*){};
 void PyObject::clear(){};
 PyObject* PyObject::copy() const{
     return nullptr;
 };
-void PyObject::extend(PyObject*){};
+void PyObject::extend(const PyObject*){};
 PyObject* PyObject::index(PyObject*) const{
     return nullptr;
 };

@@ -56,16 +56,16 @@ public:
 
     // String
     virtual const PyObject* size() const;
-    virtual PyObject* lower() const;
-    virtual PyObject* upper() const;
-    virtual PyObject* title() const;
+    virtual void lower();
+    virtual void upper();
+    virtual void title();
 
     // List
     virtual void append(PyObject*);
-    virtual void insert(PyObject*, PyObject*);
+    virtual void insert(const PyObject*, PyObject*);
     virtual void clear();
     virtual PyObject* copy() const;
-    virtual void extend(PyObject*);
+    virtual void extend(const PyObject*);
     virtual PyObject* index(PyObject*) const;
     virtual PyObject* pop(PyObject*);
     virtual void remove(PyObject*);

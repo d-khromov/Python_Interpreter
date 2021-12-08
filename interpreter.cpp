@@ -209,8 +209,9 @@ void Interpreter::RunFrame(const frame_ptr& f) {
             }
             case BUILD_LIST:{
                 auto list = std::make_shared<List>(List());
-                for(size_t i=arg-1; i>-1;i--){
-                    list->insert(i, frame->Pop().get());
+                auto tmp = Int(0);
+                for(size_t i=0; i<arg;++i){
+                    list->insert(&tmp, frame->Pop().get());
                 }
                 frame->Push(list);
                 break;
@@ -441,7 +442,7 @@ bool Interpreter::CheckMethod(ptr obj, const std::string& name){
     }
 }
 
-void Interpreter::CallBuiltinMethod(const frame_ptr& f, const std::string& name, const ptr& obj, size_t arg){
+void Interpreter::CallBuiltinMethod(const frame_ptr& f, const std::string& name, ptr& obj, size_t arg){
     std::vector<ptr> args;
     for(size_t i=0; i<arg; ++i){
         args.push_back(f->Pop());
