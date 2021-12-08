@@ -71,6 +71,7 @@ public:
     virtual void remove(PyObject*);
     virtual void reverse();
     virtual void sort();
+    virtual PyObject* operator[](PyObject*);
 };
 
 
